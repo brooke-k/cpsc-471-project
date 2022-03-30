@@ -17,6 +17,14 @@ const ProductSearch = () => {
     "Triticale",
   ];
 
+  const productTypes = [
+    "Food",
+    "Cosmetics",
+    "Household",
+    "Medication",
+    "Utility",
+  ];
+
   return (
     <>
       <h1>Product Search</h1>
@@ -41,6 +49,17 @@ const ProductSearch = () => {
         ></input>
         <label for="not_contains">Does not contain</label>
       </div>
+      <p>'Ctrl+click' to select multiple options</p>
+      <label for="prodTypes" />
+      <select name="prodTypes" id="prodTypes" multiple required>
+        {productTypes.map((e, i) => {
+          return (
+            <option value={productTypes[i]} key={i}>
+              {productTypes[i]}
+            </option>
+          );
+        })}
+      </select>
     </>
   );
 };
