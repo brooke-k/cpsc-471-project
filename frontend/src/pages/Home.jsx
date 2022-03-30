@@ -1,5 +1,6 @@
 import React from "react";
 import { Link } from "react-router-dom";
+import ReportForm from "../components/ReportForm.jsx";
 import RetailerInfo from "../components/RetailerInfo.jsx";
 const Home = () => {
   return (
@@ -13,7 +14,7 @@ const Home = () => {
         <Link to="/admin_login">Administrator Login</Link>
         <Link to="/reg_user_home">User Login</Link>
       </nav>
-      <RetailerInfo />
+      <ReportForm />
     </div>
   );
 };
