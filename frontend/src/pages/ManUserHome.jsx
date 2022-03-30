@@ -1,11 +1,11 @@
 import React from "react";
 
-const ManUserHome = () => {
+function SignUp() {
   return (
     <div>
-      <h1>This is the ManUserHome</h1>
+      <h1>This is the SignUp</h1>
     </div>
   );
-};
+}
 
-export default ManUserHome;
+export default SignUp;
