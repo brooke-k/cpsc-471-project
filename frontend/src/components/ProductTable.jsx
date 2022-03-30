@@ -1,10 +1,7 @@
-import ProductRow from "./productDisplay";
+import ProductRow from "./ProductDisplay";
 import React from "react";
 
 const ProductTable = () => {
-  const n = 10;
-  let franticScreaming = new Array(10);
-
   return (
     <table>
       <thead>

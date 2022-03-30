@@ -12,14 +12,14 @@ const ProductRow = () => {
 
   return (
     <tr>
-      <td>prodName</td>
-      <td>prodID</td>
-      <td>ingred</td>
-      <td>notableAllerg</td>
-      <td>soldAt</td>
-      <td>madeBy</td>
-      <td>variants</td>
-      <td>currAlerts</td>
+      <td>{prodName}</td>
+      <td>{prodID}</td>
+      <td>{ingred}</td>
+      <td>{notableAllerg}</td>
+      <td>{soldAt}</td>
+      <td>{madeBy}</td>
+      <td>{variants}</td>
+      <td>{currAlerts}</td>
     </tr>
   );
 };
