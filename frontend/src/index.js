@@ -1,30 +1,41 @@
 import React from 'react';
-import { BrowserRouter, Routes, Route } from 'react-router-dom';
+import { BrowserRouter, Routes, Route, Link } from 'react-router-dom';
 import Signup from './pages/SignUp';
 import RegUserHome from './pages/RegUserHome';
 import ManUserHome from './pages/ManUserHome.jsx';
 import Login from './pages/Login.jsx';
 import AdminHome from './pages/AdminHome.jsx';
+import Home from './pages/Home.jsx';
 
 import ReactDOM from 'react-dom';
 import './index.css';
-import reportWebVitals from './reportWebVitals';
 
 
 export default function App() {
   return (
-    <BrowserRouter>
-      <Routes>
-        <Route path="/" element={<Login />} />
-        <Route path="/login" element={<Login />} />
-        <Route path="/signup" element={<Signup />} />
-        <Route path="/manufacturer_home" element={<ManUserHome />} />
-        <Route path="/admin_home" element={<AdminHome />} />
-        <Route path="/reg_user_home" element={<RegUserHome />} />
-      </Routes>
-    </BrowserRouter>
+    <>
+      <h1> Ahoy</h1>
+      {/* <nav>
+
+      </nav> */}
+      <BrowserRouter>
+        <Routes>
+          <Route path="/" element={<Home />} />
+          <Route path="/login" element={<Login />} />
+          <Route path="/signup" element={<Signup />} />
+          <Route path="/manufacturer_home" element={<ManUserHome />} />
+          <Route path="/admin_home" element={<AdminHome />} />
+          <Route path="/reg_user_home" element={<RegUserHome />} />
+        </Routes>
+      </BrowserRouter>
+    </>
   )
 }
+
+ReactDOM.render(
+  <App />,
+  document.getElementById("root")
+);
 
 // ReactDOM.render(
 
