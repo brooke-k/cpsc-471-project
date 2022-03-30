@@ -9,18 +9,16 @@ import Home from './pages/Home.jsx';
 
 import ReactDOM from 'react-dom';
 import './index.css';
+import ProductSearch from './pages/ProductSearch';
+import TestPage from './pages/TestPage';
 
 
 export default function App() {
   return (
     <>
-      <h1> Ahoy</h1>
-      {/* <nav>
-
-      </nav> */}
       <BrowserRouter>
         <Routes>
-          <Route path="/" element={<Home />} />
+          <Route path="/" element={<TestPage />} />
           <Route path="/login" element={<Login />} />
           <Route path="/signup" element={<Signup />} />
           <Route path="/manufacturer_home" element={<ManUserHome />} />
