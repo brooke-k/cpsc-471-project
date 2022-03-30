@@ -42,6 +42,7 @@
     "@babel/preset-react": "^7.16.7",
     "babel-loader": "^8.2.4",
     "html-webpack-plugin": "^5.5.0",
+    "react-router-dom": "^6.2.2",
     "sass": "^1.49.9",
     "sass-loader": "^12.6.0",
     "webpack": "^5.70.0",
