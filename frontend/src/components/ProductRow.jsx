@@ -1,14 +1,14 @@
 import React from "react";
 const ProductRow = () => {
-  const prodName = "Exmaple name";
-  const prodID = "ASHDKJFLSHL9384094AJ3HKJAWE";
-  const ingred =
-    "Food, more food, another food, someone thinking about pasta 2 feet away from you";
+  const prodName = "Example name";
+  const prodID = "ASHDKJF5345";
+  const ingred = "Food, more food, another food, pasta";
   const notableAllerg = "pasta";
   const soldAt = "Example retailer name";
   const madeBy = "Example manufacturer name";
   const variants = "Example variant names";
   const currAlerts = "No current alerts";
+  const dateAdded = "January 1, 1970";
 
   return (
     <tr>
@@ -20,6 +20,7 @@ const ProductRow = () => {
       <td>{madeBy}</td>
       <td>{variants}</td>
       <td>{currAlerts}</td>
+      <td>{dateAdded}</td>
     </tr>
   );
 };

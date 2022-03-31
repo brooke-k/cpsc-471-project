@@ -14,10 +14,11 @@ const ProductTable = () => {
           <td>Made By</td>
           <td>Available Varieties</td>
           <td>Current Alerts</td>
+          <td>Date Added</td>
         </tr>
       </thead>
       <tbody>
-        {new Array(10).fill(null).map((e, i) => {
+        {new Array(4).fill(null).map((e, i) => {
           return <ProductRow key={i} />;
         })}
       </tbody>
