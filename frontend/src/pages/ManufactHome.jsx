@@ -14,6 +14,8 @@ function ManufactHome() {
 
   const manufactInfo = {
     name: "Beans4U Food Co.",
+    username: "Beans4U",
+    email: "communications@beans4u.com",
     address: addr,
     phone: "+1-306-383-8211",
     regions: retailReg,
@@ -28,6 +30,8 @@ function ManufactHome() {
           {manufactInfo.address.street}, {manufactInfo.address.city},
           {manufactInfo.address.province} {manufactInfo.address.zipCode}
         </p>
+        <p>@{manufactInfo.username}</p>
+        <p>{manufactInfo.email}</p>
         <h2>Retail Regions:</h2>
         <table>
           <tr>
