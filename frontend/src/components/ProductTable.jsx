@@ -1,4 +1,4 @@
-import ProductRow from "./ProductDisplay";
+import ProductRow from "./ProductRow";
 import React from "react";
 
 const ProductTable = () => {
