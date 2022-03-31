@@ -7,10 +7,11 @@ import AdminHome from './pages/AdminHome.jsx';
 import Home from './pages/Home.jsx';
 
 import ReactDOM from 'react-dom';
-import './index.css';
+import './styles/base.scss';
 import ProductSearch from './pages/ProductSearch';
 import TestPage from './pages/TestPage';
 import ManufactHome from './pages/ManufactHome';
+import UserProfile from './pages/UserProfile';
 
 
 export default function App() {
@@ -23,7 +24,7 @@ export default function App() {
           <Route path="/signup" element={<Signup />} />
           <Route path="/manufacturer_home" element={<ManufactHome />} />
           <Route path="/admin_home" element={<AdminHome />} />
-          <Route path="/reg_user_home" element={<RegUserHome />} />
+          <Route path="/user_profile" element={<UserProfile />} />
         </Routes>
       </BrowserRouter>
     </>
