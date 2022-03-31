@@ -35,6 +35,22 @@ const ProductSearch = () => {
     "Apple",
   ];
 
+  const retailers = [
+    "GoGo Shopping",
+    "Many Names",
+    "Top Shelf Grocers",
+    "Sparkd Cosmetics",
+    "Citizen Clean",
+  ];
+
+  const retailReg = [
+    "Western Canada",
+    "Central Canada",
+    "Eastern Canada",
+    "Atlantic Canada",
+    "Quebec",
+  ];
+
   return (
     <>
       <h1>Product Search</h1>
@@ -83,6 +99,34 @@ const ProductSearch = () => {
             );
           })}
         </select>
+      </div>
+      <div>
+        <label for="retailers">Retailers</label>
+        <select name="retailers" id="retailers" multiple>
+          {manus.map((e, i) => {
+            return (
+              <option value={retailers[i]} key={i}>
+                {retailers[i]}
+              </option>
+            );
+          })}
+        </select>
+      </div>
+      <div>
+        <label for="prodTypes">Retail Region</label>
+        <select name="retailReg" id="retailReg">
+          {retailReg.map((e, i) => {
+            return (
+              <option value={retailReg[i]} key={i}>
+                {retailReg[i]}
+              </option>
+            );
+          })}
+        </select>
+      </div>
+      <div>
+        <label for="textName">Search by name</label>
+        <input name="textName" placeholder="Product name"></input>
       </div>
     </>
   );
