@@ -84,6 +84,9 @@ function ManufactHome() {
         <h2>Alerts</h2>
         <AlertTable />
       </div>
+      <div>
+        <a href=".">Log Out</a>
+      </div>
     </div>
   );
 }

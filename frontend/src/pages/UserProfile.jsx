@@ -8,13 +8,16 @@ const UserProfile = () => {
   const userInfo = {
     username: "fishfreefriend",
     email: "janetb@yahoo.com",
+    retailReg: "Atlantic Canada",
   };
+
   return (
     <>
       <h1>User Profile Page</h1>
       <div>
         <h5>{userInfo.email}</h5>
         <h4>Logged in as @{userInfo.username}</h4>
+        <p>Current retail region: {userInfo.retailReg}</p>
       </div>
       <div>
         <h2>Allergens</h2>
@@ -51,6 +54,9 @@ const UserProfile = () => {
       <div>
         <p>See a product you'd like to report?</p>
         <a href=".">Submit a report here</a>
+      </div>
+      <div>
+        <a href=".">Log Out</a>
       </div>
     </>
   );

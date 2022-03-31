@@ -14,7 +14,6 @@ const Home = () => {
         <Link to="/admin_login">Administrator Login</Link>
         <Link to="/reg_user_home">User Login</Link>
       </nav>
-      <ReportForm />
     </div>
   );
 };

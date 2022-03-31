@@ -10,7 +10,7 @@ import UserProfile from "./UserProfile";
 const TestPage = () => {
   return (
     <>
-      <AdminHome />
+      <UserProfile />
     </>
   );
 };

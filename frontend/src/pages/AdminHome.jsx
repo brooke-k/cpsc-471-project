@@ -123,6 +123,9 @@ const AdminHome = () => {
           placeholder="Manufacturer name"
         ></input>
         <button>Search</button>
+        <div>
+          <a href=".">Log Out</a>
+        </div>
       </div>
     </>
   );
