@@ -1,0 +1,6 @@
+https://world.openfoodfacts.org/cgi/search.pl?search_terms=nutella&search_simple=1&action=process
+ => Database for food data, can be searched by barcode
+
+
+https://world.openbeautyfacts.org/
+=> Database for cosmetics data, can be searched by barcode

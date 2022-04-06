@@ -7,13 +7,18 @@ const RetailerInfo = () => {
 
   return (
     <>
+      <h1>Retailer Information</h1>
       <table>
         <thead></thead>
         <tbody>
           <tr>
-            <td>{retName}</td>
-            <td>{retSpecialty}</td>
-            <td>{retRegions}</td>
+            <td>Name: {retName}</td>
+          </tr>
+          <tr>
+            <td>Specialty: {retSpecialty}</td>
+          </tr>
+          <tr>
+            <td>Regions: {retRegions}</td>
           </tr>
         </tbody>
         <tfoot></tfoot>

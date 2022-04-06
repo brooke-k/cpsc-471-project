@@ -54,7 +54,7 @@ const ProductSearch = () => {
   return (
     <>
       <h1>Product Search</h1>
-      <div>
+      <div style={{ display: "flex", flexFlow: "row wrap", width: "40%" }}>
         {topAllergens.map((e, i) => {
           return (
             <div key={i}>
@@ -75,7 +75,7 @@ const ProductSearch = () => {
         ></input>
         <label for="not_contains">Does not contain</label>
       </div>
-      <div>
+      <div style={{ display: "flex", flexFlow: "column", width: "15%" }}>
         <p>'Ctrl+click' to select multiple options</p>
         <label for="prodTypes">Product Type</label>
         <select name="prodTypes" id="prodTypes" multiple required>
@@ -88,7 +88,7 @@ const ProductSearch = () => {
           })}
         </select>
       </div>
-      <div>
+      <div style={{ display: "flex", flexFlow: "column", width: "15%" }}>
         <label for="manufacts">Manufacturer</label>
         <select name="manufacts" id="manufacts" multiple>
           {manus.map((e, i) => {
@@ -100,7 +100,7 @@ const ProductSearch = () => {
           })}
         </select>
       </div>
-      <div>
+      <div style={{ display: "flex", flexFlow: "column", width: "15%" }}>
         <label for="retailers">Retailers</label>
         <select name="retailers" id="retailers" multiple>
           {manus.map((e, i) => {
@@ -113,6 +113,10 @@ const ProductSearch = () => {
         </select>
       </div>
       <div>
+        <label for="textName">Search by name</label>
+        <input name="textName" placeholder="Product name"></input>
+      </div>
+      <div>
         <label for="prodTypes">Retail Region</label>
         <select name="retailReg" id="retailReg">
           {retailReg.map((e, i) => {
@@ -123,10 +127,6 @@ const ProductSearch = () => {
             );
           })}
         </select>
-      </div>
-      <div>
-        <label for="textName">Search by name</label>
-        <input name="textName" placeholder="Product name"></input>
       </div>
     </>
   );
