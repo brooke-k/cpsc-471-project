@@ -51,18 +51,41 @@ async def banish_power (powerSource: str, deleteOption: Optional[str] = None):
              return JSONResponse(status_code=status.HTTP_200_OK)
         else:
             raise HTTPException(status_code=404, detail="Power sources not banished")
+    elif deleteOption == 'BEGONE, EVERY LAST ONE OF YE\'S':
+        delete_result = config.db["testcollect"].delete_many({})
+        if delete_result.deleted_count >= 1:
+             return JSONResponse(status_code=status.HTTP_200_OK)
+        else:
+            raise HTTPException(status_code=404, detail="Power sources not banished")
     else:
         raise HTTPException(status_code=400, detail="Incorrect delete option. Should be be 'one', 'many', or empty.")
 
 
 @testApp.put("/power/newerpower", response_description="Update the POWER", response_model=model.testModel)
-async def update_thy_power (powerSourceString: str, updatedPowerString: str):
-    if (power := config.db["testcollect"].find_one({"powerSource": powerSourceString})) is not None:
-        update_result = config.db['testcollect'].update_one({"powerSource":powerSourceString}, {"$set": {"powerSource": updatedPowerString}})
+async def update_thy_power (powerSourceString: str, updatedPowerString: str, updateOption: Optional[str] = None):
+    if updateOption == 'one' or not updateOption:
+        if (power := config.db["testcollect"].find_one({"powerSource": powerSourceString})) is not None:
+            update_result = config.db['testcollect'].update_one({"powerSource":powerSourceString}, {"$set": {"powerSource": updatedPowerString}})
+            if update_result.modified_count == 1:
+                return JSONResponse(status_code=status.HTTP_200_OK)
+        else:
+            raise HTTPException(status_code=404, detail="Power source not found")
+    elif updateOption == 'many':
+        if (power := config.db["testcollect"].find_one({"powerSource": powerSourceString})) is not None:
+            update_result = config.db['testcollect'].update_many({"powerSource":powerSourceString}, {"$set": {"powerSource": updatedPowerString}})
         if update_result.modified_count >= 1:
-            print("updated! yay")
+            return JSONResponse(status_code=status.HTTP_200_OK)
+        else:
+            raise HTTPException(status_code=404, detail="Power source not found")
+    elif updateOption == 'all':
+        update_result = config.db['testcollect'].update_many({}, {"$set": {"powerSource": updatedPowerString}})
+        if update_result.modified_count >= 1:
+           return JSONResponse(status_code=status.HTTP_200_OK)
+        else:
+            raise HTTPException(status_code=404, detail="Power source not found")
     else:
-        raise HTTPException(status_code=404, detail="Power source not found")
+        raise HTTPException(status_code=400, detail="Incorrect update option. Should be be 'one', 'many', 'all', or empty.")
+
 
 
 
