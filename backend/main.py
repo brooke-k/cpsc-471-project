@@ -1,4 +1,5 @@
-from fastapi import FastAPI, HTTPException, status, Body
+from fastapi import FastAPI, HTTPException, status, Body, Form
+from typing import Optional
 import config, uvicorn, os, model
 from fastapi.encoders import jsonable_encoder
 from fastapi.responses import JSONResponse
@@ -11,13 +12,12 @@ testApp = FastAPI()
 def parse_json(data):
     return json.loads(json_util.dumps(data))
 
-
 @testApp.get("/")
 def index():
     return {"message": "Hewwo World"}
 
 
-@testApp.get("/power/", response_description="GAIN POWER", response_model=model.testModel)
+@testApp.get("/power/obtain", response_description="GAIN POWER", response_model=model.testModel)
 async def get_power (powerSource: str):
     if (power := config.db["testcollect"].find_one({"powerSource": powerSource})) is not None:
         return power
@@ -25,15 +25,37 @@ async def get_power (powerSource: str):
         raise HTTPException(status_code=404, detail="Power source not found")
 
 
-@testApp.post("/powermail/", response_description="SEND THE POWER", response_model=model.testModel)
-async def send_power (powerSource: model.testModel = Body(...)):
+@testApp.post("/power/mail", response_description="SEND THE POWER", response_model=model.testModel)
+async def send_power (powerSource: str):
+
+    powerSource = model.testModel(powerSource=powerSource)
     powerSource = jsonable_encoder(powerSource)
-    print(powerSource)
     new_powerSource = config.db["testcollect"].insert_one(powerSource)
     if (power := config.db["testcollect"].find_one({"_id": new_powerSource.inserted_id})) is not None:
         return JSONResponse(status_code=status.HTTP_201_CREATED, content = parse_json(power))
     else:
         raise HTTPException(status_code=404, detail="Power source not added")
+
+@testApp.delete("/power/banish", response_description="BEGONE THOT")
+async def banish_power (powerSource: str, deleteOption: Optional[str] = None):
+
+    if deleteOption == 'one' or not deleteOption:
+        delete_result = config.db["testcollect"].delete_one({"powerSource":powerSource})
+        if delete_result.deleted_count == 1:
+             return JSONResponse(status_code=status.HTTP_200_OK)
+        else:
+            raise HTTPException(status_code=404, detail="Power source not banished")
+    elif deleteOption == 'many':
+        delete_result = config.db["testcollect"].delete_many({"powerSource":powerSource})
+        if delete_result.deleted_count >= 1:
+             return JSONResponse(status_code=status.HTTP_200_OK)
+        else:
+            raise HTTPException(status_code=404, detail="Power sources not banished")
+    else:
+        raise HTTPException(status_code=400, detail="Incorrect delete option. Should be be 'one', 'many', or empty.")
+
+
+
 
 
 if __name__ == "__main__":

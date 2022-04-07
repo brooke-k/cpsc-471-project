@@ -1,7 +1,24 @@
 from pydantic import BaseModel, Field
 from bson import ObjectId
 
+# from enum import Enum // BROOKE NOTE Can be used to have arguments that are DROP DOWN ONLY (in docs, essentially just limits the possibilites of accepted arguments)
+
+# class OrderByTypeModel(str, Enum):
+#     popularity = "popularity"
+#     price = "price"
+#     review_score = "review_score"
+
 #Converts ObjectId to a String
+
+class powerModel:
+  powerSource: str
+
+  def __init__(self, powerSource):
+    self.powerSource = powerSource
+
+
+
+
 class PyObjectId(ObjectId):
 
     @classmethod
@@ -21,6 +38,8 @@ class PyObjectId(ObjectId):
 
 # Used for getting
 class testModel(BaseModel):
+
+
     _id: Field(default_factory=PyObjectId, alias="_id")
     powerSource: str
 
