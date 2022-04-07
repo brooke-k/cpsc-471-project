@@ -26,11 +26,11 @@ async def get_power (powerSource: str):
 
 
 @testApp.post("/power/mail", response_description="SEND THE POWER", response_model=model.testModel)
-async def send_power (powerSource: str):
+async def send_power (powerSourceString: str):
 
-    powerSource = model.testModel(powerSource=powerSource)
-    powerSource = jsonable_encoder(powerSource)
-    new_powerSource = config.db["testcollect"].insert_one(powerSource)
+    powerSourcePost = model.testModel(powerSource=powerSourceString)
+    powerSourcePost = jsonable_encoder(powerSourcePost)
+    new_powerSource = config.db["testcollect"].insert_one(powerSourcePost)
     if (power := config.db["testcollect"].find_one({"_id": new_powerSource.inserted_id})) is not None:
         return JSONResponse(status_code=status.HTTP_201_CREATED, content = parse_json(power))
     else:
