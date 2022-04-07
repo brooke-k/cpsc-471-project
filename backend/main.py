@@ -58,14 +58,13 @@ async def banish_power (powerSource: str, deleteOption: Optional[str] = None):
 @testApp.put("/power/newerpower", response_description="Update the POWER", response_model=model.testModel)
 async def update_thy_power (powerSourceString: str, updatedPowerString: str):
     if (power := config.db["testcollect"].find_one({"powerSource": powerSourceString})) is not None:
-        print(power['_id'])
-        powerSourceUpdate = model.testModel(powerSource=updatedPowerString)
-        update_result = config.db['testcollect'].update_one({"_id": power['_id']}, {"$set": {"powerSource": updatedPowerString}})
-
+        update_result = config.db['testcollect'].update_one({"powerSource":powerSourceString}, {"$set": {"powerSource": updatedPowerString}})
         if update_result.modified_count >= 1:
             print("updated! yay")
     else:
         raise HTTPException(status_code=404, detail="Power source not found")
+
+
 
 
 if __name__ == "__main__":
