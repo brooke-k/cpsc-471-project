@@ -53,16 +53,3 @@ class testModel(BaseModel):
             "powerSource":"beans"
           }
         }
-
-class updateTestModel(BaseModel):
-    powerSource: str
-
-    class Config:
-        arbitrary_types_allowed = True
-        json_encoders = {ObjectId: str}
-        schema_extra = {
-
-          "testData": {
-            "powerSource":"beans"
-          }
-        }
