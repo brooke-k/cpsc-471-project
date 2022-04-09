@@ -8,12 +8,14 @@ import ManufactHome from "./ManufactHome";
 import ProductSearch from "./ProductSearch";
 import UserProfile from "./UserProfile";
 import RetailerInfo from "../components/RetailerInfo";
-import TestConcept from "./TestConcept";
+import UserTest from "../test_connections/UserTest";
 
 const TestPage = () => {
   return (
     <>
-      <TestConcept />
+      <h1>
+        <UserTest />
+      </h1>
     </>
   );
 };
