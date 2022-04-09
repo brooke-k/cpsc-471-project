@@ -32,6 +32,12 @@ const TestConcept = () => {
   };
 
   const getChange = (e) => {
+    setCatSus(
+      "https://i.pinimg.com/originals/59/94/92/599492d0af693f11c73b368149b0b287.jpg"
+    );
+    setPowers(".... Wizarding In Progress ...");
+    setStyleThing1("plum");
+    setStyleThing2(30);
     setWizardSpell(e.target.value);
   };
 
@@ -90,14 +96,36 @@ const TestConcept = () => {
 
   return (
     <>
+      <img
+        src={catSus}
+        style={{
+          objectFit: "cover",
+          objectPosition: "50%",
+          backgroundRepeat: "no-repeat",
+          position: "absolute",
+          top: 0,
+          bottom: 0,
+          right: 0,
+          left: 0,
+          width: "100vw",
+          height: "100vh",
+        }}
+        alt="beans"
+      />
       <div
         style={{
           display: "flex",
           flexFlow: "column",
-          width: 100 + "vw",
-          height: 100 + "vh",
+          width: "auto",
+          height: "auto",
           position: "absolute",
+          textAlign: "center",
+          alignContent: "stretch",
+          justifyContent: "stretch",
           top: 0,
+          bottom: 0,
+          right: 0,
+          left: 0,
         }}
       >
         <h2
@@ -105,10 +133,11 @@ const TestConcept = () => {
             background: stylething1,
             fontSize: stylething2 + "pt",
             gridColumn: 1,
-            height: 400 + "px",
-            width: 500 + "px",
-            gridRow: 1,
+            height: 500 + "px",
+            width: 350 + "px",
             fontFamily: "sans-serif",
+            alignSelf: "center",
+            justifySelf: "center",
           }}
         >
           {powers}
@@ -117,10 +146,11 @@ const TestConcept = () => {
           src={catSus}
           style={{
             objectFit: "cover",
-            height: 800 + "px",
-            width: 800 + "px",
-            gridColumn: 2,
-            gridRow: 1,
+            height: 400 + "px",
+            width: "300px",
+            alignSelf: "center",
+            justifySelf: "center",
+            backgroundColor: "lightcyan",
           }}
           alt="IS THE CAT SUS???"
         />
@@ -131,9 +161,42 @@ const TestConcept = () => {
           onChange={getChange}
           value={wizardSpell}
         />
-        <button onClick={() => summonPower()}>haz powers?</button>
-        <button onClick={() => yeetTheDeets()}>Sned</button>
-        <button onClick={() => deetTheYeets()}>Deet</button>
+        <button
+          onClick={() => summonPower()}
+          style={{
+            alignSelf: "center",
+            justifySelf: "center",
+          }}
+        >
+          haz powers?
+        </button>
+        <button
+          onClick={() => yeetTheDeets()}
+          style={{
+            alignSelf: "center",
+            justifySelf: "center",
+          }}
+        >
+          Sned
+        </button>
+        <button
+          onClick={() => deetTheYeets()}
+          style={{
+            alignSelf: "center",
+            justifySelf: "center",
+          }}
+        >
+          Deet
+        </button>
+        <button
+          onClick={() => changeTheWorld()}
+          style={{
+            alignSelf: "center",
+            justifySelf: "center",
+          }}
+        >
+          Deet
+        </button>
       </div>
     </>
   );
