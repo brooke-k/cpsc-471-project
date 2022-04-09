@@ -5,15 +5,29 @@ from fastapi.encoders import jsonable_encoder
 from fastapi.responses import JSONResponse
 import json
 from bson import json_util
+from pydantic import BaseModel, Field
+from fastapi.middleware.cors import CORSMiddleware
+
 
 
 testApp = FastAPI()
+
+origins = ["http://localhost:8000"]
+testApp.add_middleware(
+    CORSMiddleware,
+    allow_origins=origins,
+    allow_credentials=True,
+    allow_methods="*",
+    allow_headers="*",
+)
+
+
 
 def parse_json(data):
     return json.loads(json_util.dumps(data))
 
 @testApp.get("/")
-def index():
+async def index():
     return {"message": "Hewwo World"}
 
 
@@ -25,16 +39,17 @@ async def get_power (powerSource: str):
         raise HTTPException(status_code=404, detail="Power source not found")
 
 
-@testApp.post("/power/mail", response_description="SEND THE POWER", response_model=model.testModel)
-async def send_power (powerSourceString: str):
+@testApp.post("/power/mail")
+async def send_power (testMod: model.testModel):
 
-    powerSourcePost = model.testModel(powerSource=powerSourceString)
-    powerSourcePost = jsonable_encoder(powerSourcePost)
+    powerSourcePost = jsonable_encoder(testMod)
     new_powerSource = config.db["testcollect"].insert_one(powerSourcePost)
     if (power := config.db["testcollect"].find_one({"_id": new_powerSource.inserted_id})) is not None:
         return JSONResponse(status_code=status.HTTP_201_CREATED, content = parse_json(power))
     else:
         raise HTTPException(status_code=404, detail="Power source not added")
+
+
 
 @testApp.delete("/power/banish", response_description="BEGONE THOT")
 async def banish_power (powerSource: str, deleteOption: Optional[str] = None):
