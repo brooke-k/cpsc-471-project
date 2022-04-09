@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import axiosJSONInst from "../axios";
 
 import Address from "../components/Address";
 import { RetailRegion } from "../components/constant/RetailRegions";
@@ -13,7 +14,7 @@ const UserTest = () => {
   const [city, setCity] = useState("");
   const [province, setProvince] = useState("");
   const [zipCode, setZipCode] = useState("");
-  const [email, setEmail] = useState("");
+  const [emailAddr, setEmailAddr] = useState("");
   const [phoneNo, setPhoneNo] = useState("");
 
   const handleUsername = (e) => {
@@ -26,17 +27,30 @@ const UserTest = () => {
     setPwrd(e.target.value);
   };
   const handleEmail = (e) => {
-    setEmail(e.target.value);
+    setEmailAddr(e.target.value);
   };
   const handleRetailReg = (e) => {
     setRetailReg(e.target.value);
+  };
+
+  const createUser = () => {
+    axiosJSONInst
+      .post("/user/create/regular", {
+        username: usrNme,
+        name: nme,
+        email: emailAddr,
+        password: pwrd,
+        retail_region: retailReg,
+      })
+      .then((res) => console.log(res))
+      .catch((err) => console.log(err));
   };
 
   return (
     <>
       <div>
         <h3>CURRENT VALUES</h3>
-        <p>username: {usrNme}</p> <p>email: {email}</p>
+        <p>username: {usrNme}</p> <p>email: {emailAddr}</p>
         <p>password: {pwrd}</p>
         <p>retail region: {retailReg}</p>
       </div>
@@ -52,7 +66,7 @@ const UserTest = () => {
       <input
         type="email"
         placeholder="Email"
-        value={email}
+        value={emailAddr}
         onChange={handleEmail}
         id="email"
       />
@@ -64,6 +78,14 @@ const UserTest = () => {
         onChange={handlePassword}
         id="pwrd"
       />
+      <label for="nme">First Name</label>
+      <input
+        type="text"
+        placeholder="First Name"
+        value={nme}
+        onChange={handleName}
+        id="nme"
+      />
       <label for="retailReg">Retail Region</label>
       <select id="retailReg" onChange={handleRetailReg}>
         {RetailRegion.map((e, i) => {
@@ -74,6 +96,7 @@ const UserTest = () => {
           );
         })}
       </select>
+      <button onClick={createUser}>Create New User</button>
     </>
   );
 };
