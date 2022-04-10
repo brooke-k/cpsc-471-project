@@ -16,6 +16,7 @@ const UserTest = () => {
   const [zipCode, setZipCode] = useState("");
   const [emailAddr, setEmailAddr] = useState("");
   const [phoneNo, setPhoneNo] = useState("");
+  const [errNotif, setErrNotif] = useState("");
 
   const handleUsername = (e) => {
     setUsrNme(e.target.value);
@@ -34,6 +35,18 @@ const UserTest = () => {
   };
 
   const createUser = () => {
+    if (
+      usrNme === "" ||
+      nme === "" ||
+      pwrd === "" ||
+      retailReg === "" ||
+      emailAddr === ""
+    ) {
+      setErrNotif(
+        "Some information is missing. Please ensure all fields are filled in."
+      );
+      return;
+    }
     axiosJSONInst
       .post("/user/create/regular", {
         username: usrNme,
@@ -42,10 +55,45 @@ const UserTest = () => {
         password: pwrd,
         retail_region: retailReg,
       })
-      .then((res) => console.log(res))
+      .then((res) => {
+        console.log(res);
+        setErrNotif(" ");
+      })
       .catch((err) => console.log(err));
   };
 
+  const verifyUser = () => {
+    if (usrNme === "" || pwrd === "" || emailAddr === "") {
+      setErrNotif(
+        "Some information is missing. Please ensure username, email, and password are filled in."
+      );
+      return;
+    }
+
+    const getString =
+      "/user/verify/regular?username=" +
+      usrNme +
+      "&email=" +
+      emailAddr +
+      "&password=" +
+      pwrd;
+    axiosJSONInst
+      .get(getString)
+      .then((res) => {
+        setUsrNme(res.data.username);
+        setPwrd(res.data.password);
+        setNme(res.data.name);
+        setEmailAddr(res.data.email);
+        setRetailReg(res.data.retailReg);
+        setErrNotif("User Verified");
+      })
+      .catch((err) => {
+        console.log(err);
+        setErrNotif(
+          "A username matching that email and password could not be found."
+        );
+      });
+  };
   return (
     <>
       <div>
@@ -54,7 +102,7 @@ const UserTest = () => {
         <p>password: {pwrd}</p>
         <p>retail region: {retailReg}</p>
       </div>
-      <label for="usrNme">Username</label>
+      <label htmlFor="usrNme">Username</label>
       <input
         type="text"
         placeholder="Username"
@@ -62,7 +110,7 @@ const UserTest = () => {
         onChange={handleUsername}
         id="usrNme"
       />
-      <label for="email">Email Address</label>
+      <label htmlFor="email">Email Address</label>
       <input
         type="email"
         placeholder="Email"
@@ -70,7 +118,7 @@ const UserTest = () => {
         onChange={handleEmail}
         id="email"
       />
-      <label for="pwrd">Password</label>
+      <label htmlFor="pwrd">Password</label>
       <input
         type="password"
         placeholder="Password"
@@ -78,7 +126,7 @@ const UserTest = () => {
         onChange={handlePassword}
         id="pwrd"
       />
-      <label for="nme">First Name</label>
+      <label htmlFor="nme">First Name</label>
       <input
         type="text"
         placeholder="First Name"
@@ -86,7 +134,7 @@ const UserTest = () => {
         onChange={handleName}
         id="nme"
       />
-      <label for="retailReg">Retail Region</label>
+      <label htmlFor="retailReg">Retail Region</label>
       <select id="retailReg" onChange={handleRetailReg}>
         {RetailRegion.map((e, i) => {
           return (
@@ -97,6 +145,8 @@ const UserTest = () => {
         })}
       </select>
       <button onClick={createUser}>Create New User</button>
+      <button onClick={verifyUser}>VerifyUser</button>
+      <div>{errNotif}</div>
     </>
   );
 };
