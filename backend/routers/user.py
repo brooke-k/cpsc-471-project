@@ -8,7 +8,7 @@ from bson import json_util
 from pydantic import BaseModel, Field
 from fastapi.middleware.cors import CORSMiddleware
 from models import user
-from models.user import Administrator
+from models.user import Administrator, AdminBase
 import uuid
 
 def parse_json(data):
@@ -48,12 +48,19 @@ async def create_user(base_user: user.RegularUser):
   else:
       raise HTTPException(status_code=400, detail="There already exists a user with that email and password.")
 
-@apiRouter.get("/verify/regular", response_model=user.RegularUser)
+@apiRouter.get("/verify/non-admin", response_model=user.UserBase)
 async def get_user(username: str, email: str, password: str):
-  if (userCheck := config.db[regularCollect].find_one({"username":username, "email":email, "password":password})) is not None:
+  if (userCheck := config.db[regularCollect].find_one({"username":username, "email":email, "password":password})) is not None or (userCheck := config.db[manufactCollect].find_one({"username":username, "email":email, "password":password})):
     return userCheck
   else:
     raise HTTPException(status_code=400, detail="A user with that email and password could not be found")
+
+@apiRouter.get("/verify/admin", response_model=AdminBase)
+async def get_user(username: str, email: str, password: str, admin_id: str):
+  if (userCheck := config.db[adminCollect].find_one({"username":username, "email":email, "password":password})):
+    return userCheck
+  else:
+    raise HTTPException(status_code=400, detail="An administrator with that email, password, and adminID could not be found")
 
 @apiRouter.post("/create/manufacturer", response_description="Create a new manufacturer user")
 async def create_user(user: user.Manufacturer):
