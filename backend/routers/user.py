@@ -36,3 +36,15 @@ async def get_user(username: str, email: str, password: str):
     return userCheck
   else:
     raise HTTPException(status_code=400, detail="A user with that email and password could not be found")
+
+@apiRouter.post("/create/manufacturer", response_description="Create a new manufacturer user")
+async def create_user(user: user.Manufacturer):
+  if (notExistant := config.db[manufactCollect].find_one({"username":user.username, "email":user.email, "name":user.name})) is None and (notExistant := config.db[manufactCollect].find_one({"name":user.name})) is None:
+      userPost = jsonable_encoder(user)
+      new_user = config.db[manufactCollect].insert_one(userPost)
+      if (userCheck := config.db[manufactCollect].find_one({"_id":new_user.inserted_id})) is not None:
+        JSONResponse(status_code=status.HTTP_201_CREATED, content = parse_json(userCheck))
+      else:
+          raise HTTPException(status_code=404, detail="New manufacturer was not added to the database.")
+  else:
+      raise HTTPException(status_code=400, detail="There already exists a manufacturer with that email, username, or name. ")

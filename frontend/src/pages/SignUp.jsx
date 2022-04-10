@@ -14,9 +14,9 @@ const SignUp = () => {
   const [emailAddr, setEmailAddr] = useState(""); // User's password
   const [selectedType, setSelectedType] = useState(userType[0]);
   const [admID, setAdmID] = useState("");
-  const [street, setStreet] = useState("");
-  const [city, setCity] = useState("");
-  const [province, setProvince] = useState("");
+  const [strt, setStrt] = useState("");
+  const [cty, setCty] = useState("");
+  const [provTer, setProvTer] = useState("");
   const [zipCode, setZipCode] = useState("");
   const [phoneNo, setPhoneNo] = useState("");
 
@@ -36,13 +36,13 @@ const SignUp = () => {
     setRetailReg(e.target.value);
   };
   const handleStreet = (e) => {
-    setStreet(e.target.value);
+    setStrt(e.target.value);
   };
   const handleCity = (e) => {
-    setCity(e.target.value);
+    setCty(e.target.value);
   };
   const handleProvince = (e) => {
-    setProvince(e.target.value);
+    setProvTer(e.target.value);
   };
   const handleZip = (e) => {
     setZipCode(e.target.value);
@@ -116,7 +116,7 @@ const SignUp = () => {
               value={nme}
               onChange={handleName}
               id="nme"
-            />{" "}
+            />
             <div>
               <label htmlFor="usrNme">Username</label>
               <input
@@ -162,7 +162,7 @@ const SignUp = () => {
             <label htmlFor="street">Headquarters Address</label>
             <input
               id="street"
-              value={street}
+              value={strt}
               placeholder="Street Number"
               onChange={handleStreet}
               type="text"
@@ -171,7 +171,7 @@ const SignUp = () => {
           <div>
             <input
               id="city"
-              value={city}
+              value={cty}
               placeholder="City"
               onChange={handleCity}
               type="text"
@@ -197,7 +197,7 @@ const SignUp = () => {
               type="text"
             />
           </div>
-          <button onClick={handleUserCreation}>Sign Up</button>
+          <button onClick={createManufacturer}>Sign Up</button>
         </div>
       );
     } else if (selectedType === userType[2]) {
@@ -299,10 +299,24 @@ const SignUp = () => {
       });
   };
 
+  const createManufacturer = () => {
+    axiosJSONInst.post("/user/create/manufacturer", {
+      username: usrNme,
+      email: emailAddr,
+      password: pwrd,
+      phone_no: phoneNo,
+      name: nme,
+      street: strt,
+      city: cty,
+      province: provTer,
+      zip_code: zipCode,
+    });
+  };
+
   return (
     <div>
       <h1>Sign Up</h1>
-      <p>{street}</p>
+      <p>{strt}</p>
       <div>
         <label htmlFor="accountTypeSelect">Select Account Type</label>
         <select id="accountTypeSelect" onChange={handleAccountType}>

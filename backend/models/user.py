@@ -53,7 +53,11 @@ class Manufacturer(BaseModel):
     email: str
     password: str
     phone_no: str
-    hq_addr: Address
+    street: str
+    city: str
+    province:str
+    zip_code:str
+    name: str
 
 
     class Config:
