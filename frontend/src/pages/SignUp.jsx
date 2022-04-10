@@ -233,7 +233,7 @@ const SignUp = () => {
               id="pwrd"
             />
           </div>
-          <button onClick={handleUserCreation}>Sign Up</button>
+          <button onClick={createAdmin}>Sign Up</button>
         </div>
       );
     } else {
@@ -311,6 +311,38 @@ const SignUp = () => {
       province: provTer,
       zip_code: zipCode,
     });
+  };
+
+  const createAdmin = () => {
+    if (usrNme === "" || pwrd === "" || emailAddr === "") {
+      setErrNotif(
+        "Some information is missing. Please ensure all fields are filled in."
+      );
+      return;
+    }
+    axiosJSONInst
+      .post("/user/create/administrator", {
+        username: usrNme,
+        email: emailAddr,
+        password: pwrd,
+        retail_region: "NA",
+      })
+      .then((res) => {
+        console.log(res);
+        setErrNotif("Account Created. Your unique ID is " + res.data.admin_id);
+      })
+      .catch((err) => {
+        if (err.response.status === 400) {
+          setErrNotif(
+            "An account with that username and email already exists. Please pick a different username or email and try again."
+          );
+        } else {
+          setErrNotif(
+            "Sorry, something went wrong.  Your account could not be made."
+          );
+        }
+        setPwrd("");
+      });
   };
 
   return (

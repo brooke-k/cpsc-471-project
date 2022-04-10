@@ -22,6 +22,17 @@ class Address:
   province: str
   zip_code: str
 
+class UserBase(BaseModel):
+    _id: Field(default_factory=PyObjectId, alias="_id")
+    email: str
+    username: str
+    class Config:
+        allow_population_by_field_name = True
+        arbitrary_types_allowed = True
+        json_encoders = {ObjectId: str}
+
+
+
 class RegularUser(BaseModel):
     _id: Field(default_factory=PyObjectId, alias="_id")
     email: str
