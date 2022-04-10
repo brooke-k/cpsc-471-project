@@ -9,12 +9,13 @@ import ProductSearch from "./ProductSearch";
 import UserProfile from "./UserProfile";
 import RetailerInfo from "../components/RetailerInfo";
 import UserTest from "../test_connections/UserTest";
+import SignUp from "./SignUp";
 
 const TestPage = () => {
   return (
     <>
       <h1>
-        <UserTest />
+        <SignUp />
       </h1>
     </>
   );

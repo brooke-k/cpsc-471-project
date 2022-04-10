@@ -25,7 +25,6 @@ class Address:
 class RegularUser(BaseModel):
     _id: Field(default_factory=PyObjectId, alias="_id")
     email: str
-    name: str
     password: str
     retail_region: str
     username: str
