@@ -10,11 +10,12 @@ import UserProfile from "./UserProfile";
 import RetailerInfo from "../components/RetailerInfo";
 import UserTest from "../test_connections/UserTest";
 import SignUp from "./SignUp";
+import AddProduct from "../components/AddProduct";
 
 const TestPage = () => {
   return (
     <div>
-      <SignUp />
+      <AddProduct />
     </div>
   );
 };
