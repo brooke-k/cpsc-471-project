@@ -21,8 +21,9 @@ body {
 #AppBase {
   padding: 4vh 4vw;
   display: flex;
-  align-content: space-around;
-  justify-content: space-around;
+  flex-direction: column;
+  align-content: stretch;
+  justify-content: center;
   align-items: stretch;
   justify-items: stretch;
   justify-self: stretch;

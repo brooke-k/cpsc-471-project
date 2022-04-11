@@ -2,11 +2,11 @@
 
 #contentPanel {
   background-color: white;
-  border-radius: 5rem;
+  border-radius: 2rem;
   box-shadow: 1em 0.5em 2em 0em #00000060, 2em 1em 4em 0em #00000030;
-  border-width: 0.4ch;
+  border-width: 3px;
   border-style: solid;
-  border-color: #00000060;
+  border-color: #00000050;
   align-content: center;
   justify-content: space-around;
   align-items: stretch;
@@ -43,7 +43,7 @@
   background-color: whitesmoke;
   border-radius: 1ch;
   border-style: solid;
-  border-color: #00000060;
+  border-color: #00000050;
   font-weight: 400;
   flex-shrink: 1;
   min-width: 300px;
@@ -90,7 +90,7 @@
 
 .authPanel>button {
   border-style: solid;
-  border-color: #00000060;
+  border-color: #00000050;
   color: white;
   background: seagreen;
   text-decoration: none;
@@ -158,7 +158,7 @@
   border-radius: 1ch;
   border-style: none;
   border-style: solid;
-  border-color: #00000060;
+  border-color: #00000050;
   background-color: whitesmoke;
   color: #000;
 }

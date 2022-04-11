@@ -31,10 +31,13 @@ const Login = () => {
       return;
     }
     const verifString =
-      "/user/verify/non_admin?" + "email=" + emailAddr + "&password=" + pwrd;
+      "/user/verify/non_admin?email=" + emailAddr + "&password=" + pwrd;
     axiosJSONInst
       .get(verifString)
-      .then((res) => console.log(res))
+      .then((res) => {
+        console.log(res);
+        setErrNotif("Login Success");
+      })
       .catch((err) => {
         console.log(err);
         setErrNotif("Username or password is incorrect.");
@@ -46,6 +49,7 @@ const Login = () => {
       setErrNotif("Please ensure all fields are filled in.");
       return;
     }
+
     const verifString =
       "/user/verify/admin?email=" +
       emailAddr +

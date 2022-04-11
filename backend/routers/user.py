@@ -18,6 +18,8 @@ apiRouter = APIRouter(prefix="/user", tags=["user"])
 regularCollect = "user-regular"
 manufactCollect = "user-manufacturer"
 adminCollect = "user-administrator"
+productCollect = "product"
+
 
 # Create a new regular use and add it to the database
 @apiRouter.post("/create/regular", response_description="Create a new regular user")
@@ -47,7 +49,7 @@ async def create_user(base_user: user.RegularUser):
       raise HTTPException(status_code=400, detail="There already exists a user with that email.")
 
 @apiRouter.get("/verify/non_admin", response_model=user.UserBase)
-async def get_user(username: str, email: str, password: str):
+async def get_user(email: str, password: str):
   if (userCheck := config.db[regularCollect].find_one({"email":email, "password":password})) is not None or (userCheck := config.db[manufactCollect].find_one({"email":email, "password":password})):
     return userCheck
   else:

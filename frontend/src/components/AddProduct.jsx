@@ -1,4 +1,5 @@
 import React, { useEffect, useMemo, useState, useCallback } from "react";
+import axiosJSONInst from "../axios";
 import "../styles/pages.scss";
 
 class Ingredient {
@@ -9,7 +10,6 @@ class Ingredient {
 const AddProduct = () => {
   const [manuName, setManuName] = useState("");
   const [prodVar, setProdVar] = useState("");
-
   const [prodName, setProdName] = useState("");
   const [infoNotif, setInfoNotif] = useState("");
   const [currIngred, setCurrIngred] = useState("");
@@ -54,7 +54,7 @@ const AddProduct = () => {
 
   const handleIngredient = () => {
     console.log("Handling ingredient " + currIngred);
-    const notLetterAlphaDash = /[^A-Z1-9-]+/;
+    const notLetterAlphaDash = /[^A-Z1-9- ]+/;
     const newIngred = currIngred.toUpperCase();
     setCurrIngred("");
     setIsAllergen("");
@@ -112,8 +112,35 @@ const AddProduct = () => {
     setCurrIngred("");
     setIsAllergen("");
   };
+  const handleManuName = (e) => {
+    setManuName(e.target.value);
+  };
 
-  const handleAddProduct = () => {};
+  const handleAddProduct = () => {
+    let prodID;
+    axiosJSONInst
+      .post("/product/create", {
+        name: prodName,
+        manufacturer_name: manuName,
+      })
+      .then((res) => {
+        console.log(res);
+        prodID = res.data.id_number;
+        for (let i = 0; i < ingredients.length; i++) {
+          axiosJSONInst
+            .post("/product/create/ingredient", {
+              ingredient_name: ingredients[i],
+              product_id: prodID,
+              product_name: prodName,
+            })
+            .then((res) => console.log(res))
+            .catch((err) => {
+              console.log(err);
+              return;
+            });
+        }
+      });
+  };
 
   return (
     <div id="pagePanel">
@@ -128,6 +155,16 @@ const AddProduct = () => {
             onInput={handleProdName}
           ></input>
           <label htmlFor="prodName">Product Name</label>
+        </div>
+        <div id="inputRow" style={{ justifyContent: "start" }}>
+          <input
+            id="manuName"
+            value={manuName}
+            type="text"
+            placeholder="manuName"
+            onInput={handleManuName}
+          ></input>
+          <label htmlFor="prodName">Manufacturer Name</label>
         </div>
         <div id="inputRow" style={{ justifyContent: "start" }}>
           <input
