@@ -1,4 +1,5 @@
 import React, { useEffect, useState, Dispatch } from "react";
+import { Router, Routes, Route, Link } from "react-router-dom";
 import axiosJSONInst from "../axios";
 import { ProvTer } from "../components/constant/Provinces-Territories";
 import { RetailRegion } from "../components/constant/RetailRegions";
@@ -13,7 +14,6 @@ const SignUp = () => {
   const [errNotif, setErrNotif] = useState("");
   const [emailAddr, setEmailAddr] = useState(""); // User's password
   const [selectedType, setSelectedType] = useState(userType[0]);
-  const [admID, setAdmID] = useState("");
   const [strt, setStrt] = useState("");
   const [cty, setCty] = useState("");
   const [provTer, setProvTer] = useState("");
@@ -348,7 +348,6 @@ const SignUp = () => {
   return (
     <div>
       <h1>Sign Up</h1>
-      <p>{strt}</p>
       <div>
         <label htmlFor="accountTypeSelect">Select Account Type</label>
         <select id="accountTypeSelect" onChange={handleAccountType}>
@@ -363,6 +362,7 @@ const SignUp = () => {
       </div>
       {accountOptions()}
       {errNotif}
+      <Link to="/login">Log in instead</Link>
     </div>
   );
 };

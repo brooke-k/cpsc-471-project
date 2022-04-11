@@ -13,11 +13,9 @@ import SignUp from "./SignUp";
 
 const TestPage = () => {
   return (
-    <>
-      <h1>
-        <SignUp />
-      </h1>
-    </>
+    <div>
+      <SignUp />
+    </div>
   );
 };
 

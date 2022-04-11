@@ -48,7 +48,7 @@ async def create_user(base_user: user.RegularUser):
   else:
       raise HTTPException(status_code=400, detail="There already exists a user with that email and password.")
 
-@apiRouter.get("/verify/non-admin", response_model=user.UserBase)
+@apiRouter.get("/verify/non_admin", response_model=user.UserBase)
 async def get_user(username: str, email: str, password: str):
   if (userCheck := config.db[regularCollect].find_one({"username":username, "email":email, "password":password})) is not None or (userCheck := config.db[manufactCollect].find_one({"username":username, "email":email, "password":password})):
     return userCheck

@@ -12,36 +12,51 @@ import ProductSearch from './pages/ProductSearch';
 import TestPage from './pages/TestPage';
 import ManufactHome from './pages/ManufactHome';
 import UserProfile from './pages/UserProfile';
+import App from './App'
+
+import _ from 'lodash';
 
 
-export default function App() {
-  return (
-    <>
-      <BrowserRouter>
-        <Routes>
-          <Route path="/" element={<TestPage />} />
-          <Route path="/login" element={<Login />} />
-          <Route path="/signup" element={<Signup />} />
-          <Route path="/manufacturer_home" element={<ManufactHome />} />
-          <Route path="/admin_home" element={<AdminHome />} />
-          <Route path="/user_profile" element={<UserProfile />} />
-        </Routes>
-      </BrowserRouter>
-    </>
-  )
-}
+// function App() {
+//   return (
+//     <div>
+//       <Routes>
+//         <Route path="/" element={<Login />} />
+//         <Route path="/login" element={<Login />} />
+//         <Route path="/signup" element={<Signup />} />
+//         <Route path="/manufacturer_home" element={<ManufactHome />} />
+//         <Route path="/admin_home" element={<AdminHome />} />
+//         <Route path="/user_profile" element={<UserProfile />} />
+//       </Routes>
+//       <ul>
+//         <li>
+//           <Link to="/login">Login</Link>
+//         </li>
+//       </ul>
+//     </div>
+//   )
+// }
 
-// ReactDOM.render(
-//   <App />,
-//   document.getElementById("root")
-// );
+// function TestPg() {
+//   return (<TestPage />);
+// }
+
+// function LoginPg() {
+//   return (<LoginPg />);
+// }
+
+// export default App;
+
+// // ReactDOM.render(
+// //   <App />,
+// //   document.getElementById("root")
+// // );
 
 ReactDOM.render(
-
   <React.StrictMode>
     <App />
   </React.StrictMode>,
-  document.getElementById('root')
+  document.getElementById('app')
 );
 
 // If you want to start measuring performance in your app, pass a function
