@@ -5,16 +5,12 @@ import { Link } from "react-router-dom";
 const Login = () => {
   const userType = ["Non-Admin", "Administrator"];
 
-  const [usrNme, setUsrNme] = useState(""); // Username
   const [pwrd, setPwrd] = useState(""); // Password
   const [errNotif, setErrNotif] = useState("");
   const [emailAddr, setEmailAddr] = useState(""); // User's password
   const [admID, setAdmID] = useState("");
   const [selectedType, setSelectedType] = useState(userType[0]);
 
-  const handleUsername = (e) => {
-    setUsrNme(e.target.value);
-  };
   const handlePassword = (e) => {
     setPwrd(e.target.value);
   };
@@ -30,36 +26,28 @@ const Login = () => {
   };
 
   const verifyNonAdmin = () => {
-    if (usrNme === "" || pwrd === "" || emailAddr === "") {
-      setErrNotif(
-        "Some information is missing. Please ensure all fields are filled in."
-      );
+    if (pwrd === "" || emailAddr === "") {
+      setErrNotif("Please ensure all fields are filled in.");
       return;
     }
     const verifString =
-      "/user/verify/non_admin?username=" +
-      usrNme +
-      "&email=" +
-      emailAddr +
-      "&password=" +
-      pwrd;
+      "/user/verify/non_admin?" + "email=" + emailAddr + "&password=" + pwrd;
     axiosJSONInst
       .get(verifString)
       .then((res) => console.log(res))
-      .catch((err) => console.log(err));
+      .catch((err) => {
+        console.log(err);
+        setErrNotif("Username or password is incorrect.");
+      });
   };
 
   const verifyAdmin = () => {
-    if (usrNme === "" || pwrd === "" || admID === "" || emailAddr === "") {
-      setErrNotif(
-        "Some information is missing. Please ensure all fields are filled in."
-      );
+    if (pwrd === "" || admID === "" || emailAddr === "") {
+      setErrNotif("Please ensure all fields are filled in.");
       return;
     }
     const verifString =
-      "/user/verify/admin?username=" +
-      usrNme +
-      "&email=" +
+      "/user/verify/admin?email=" +
       emailAddr +
       "&password=" +
       pwrd +
@@ -68,22 +56,16 @@ const Login = () => {
     axiosJSONInst
       .get(verifString)
       .then((res) => console.log(res))
-      .catch((err) => console.log(err));
+      .catch((err) => {
+        setErrNotif("Username, password, or adminsitrator ID is incorrect.");
+        console.log(err);
+      });
   };
 
   function accountOptions() {
     if (selectedType === userType[0]) {
       return (
         <>
-          <label htmlFor="usrNme">Username</label>
-          <input
-            type="text"
-            placeholder="Username"
-            value={usrNme}
-            onChange={handleUsername}
-            id="usrNme"
-          />
-
           <label htmlFor="email">Email Address</label>
           <input
             type="email"
@@ -108,15 +90,6 @@ const Login = () => {
     } else if (selectedType === userType[1]) {
       return (
         <>
-          <label htmlFor="usrNme">Username</label>
-          <input
-            type="text"
-            placeholder="Username"
-            value={usrNme}
-            onChange={handleUsername}
-            id="usrNme"
-          />
-
           <label htmlFor="email">Email Address</label>
           <input
             type="email"
@@ -165,8 +138,8 @@ const Login = () => {
           })}
         </select>
         {accountOptions()}
-        {errNotif}
-        <Link to="/signup">Sign up instead</Link>
+        <p>{errNotif}</p>
+        <Link to="/signup">Go to Sign Up</Link>
       </div>
     </div>
   );

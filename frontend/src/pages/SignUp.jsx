@@ -234,28 +234,9 @@ const SignUp = () => {
     accountOptions();
   }, []);
 
-  const handleUserCreation = () => {
-    switch (selectedType) {
-      case userType[0]:
-        createRegularUser();
-        break;
-      case userType[1]:
-        setErrNotif("Sorry, this account type is not available yet.");
-        break;
-      case userType[2]:
-        setErrNotif("Sorry, this account type is not available yet.");
-        break;
-      default:
-        setErrNotif("Please select an account type.");
-        break;
-    }
-  };
-
   const createRegularUser = () => {
     if (usrNme === "" || pwrd === "" || retailReg === "" || emailAddr === "") {
-      setErrNotif(
-        "Some information is missing. Please ensure all fields are filled in."
-      );
+      setErrNotif("Please ensure all fields are filled in.");
       return;
     }
     axiosJSONInst
@@ -271,38 +252,61 @@ const SignUp = () => {
       })
       .catch((err) => {
         if (err.response.status === 400) {
-          setErrNotif(
-            "An account with that username and email already exists. Please pick a different username or email and try again."
-          );
+          setErrNotif("An account with thatemail already exists.");
         } else {
           setErrNotif(
             "Sorry, something went wrong.  Your account could not be made."
           );
         }
-
         setPwrd("");
       });
   };
 
   const createManufacturer = () => {
-    axiosJSONInst.post("/user/create/manufacturer", {
-      username: usrNme,
-      email: emailAddr,
-      password: pwrd,
-      phone_no: phoneNo,
-      name: nme,
-      street: strt,
-      city: cty,
-      province: provTer,
-      zip_code: zipCode,
-    });
+    if (
+      usrNme === "" ||
+      pwrd === "" ||
+      emailAddr === "" ||
+      phoneNo === "" ||
+      nme === "" ||
+      strt === "" ||
+      cty === "" ||
+      provTer === "" ||
+      zipCode === ""
+    ) {
+      setErrNotif("Please ensure all fields are filled in.");
+      return;
+    }
+    axiosJSONInst
+      .post("/user/create/manufacturer", {
+        username: usrNme,
+        email: emailAddr,
+        password: pwrd,
+        phone_no: phoneNo,
+        name: nme,
+        street: strt,
+        city: cty,
+        province: provTer,
+        zip_code: zipCode,
+      })
+      .then((res) => {
+        console.log(res);
+        setErrNotif("Account Created");
+      })
+      .catch((err) => {
+        if (err.response.status === 400) {
+          setErrNotif("An account with that email already exists.");
+        } else {
+          setErrNotif(
+            "Sorry, something went wrong.  Your account could not be made."
+          );
+        }
+      });
   };
 
   const createAdmin = () => {
     if (usrNme === "" || pwrd === "" || emailAddr === "") {
-      setErrNotif(
-        "Some information is missing. Please ensure all fields are filled in."
-      );
+      setErrNotif("Please ensure all fields are filled in.");
       return;
     }
     axiosJSONInst
@@ -314,13 +318,13 @@ const SignUp = () => {
       })
       .then((res) => {
         console.log(res);
-        setErrNotif("Account Created. Your unique ID is " + res.data.admin_id);
+        setErrNotif(
+          "Account Created. Your unique ID is: [" + res.data.admin_id + "]"
+        );
       })
       .catch((err) => {
         if (err.response.status === 400) {
-          setErrNotif(
-            "An account with that username and email already exists. Please pick a different username or email and try again."
-          );
+          setErrNotif("An account with that email already exists.");
         } else {
           setErrNotif(
             "Sorry, something went wrong.  Your account could not be made."
@@ -345,8 +349,8 @@ const SignUp = () => {
           })}
         </select>
         {accountOptions()}
-        {errNotif}
-        <Link to="/login">Log in instead</Link>
+        <p>{errNotif}</p>
+        <Link to="/login">Go to Log In</Link>
       </div>
     </div>
   );
