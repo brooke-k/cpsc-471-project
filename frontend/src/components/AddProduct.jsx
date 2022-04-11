@@ -8,6 +8,8 @@ class Ingredient {
 
 const AddProduct = () => {
   const [manuName, setManuName] = useState("");
+  const [prodVar, setProdVar] = useState("");
+
   const [prodName, setProdName] = useState("");
   const [infoNotif, setInfoNotif] = useState("");
   const [currIngred, setCurrIngred] = useState("");
@@ -97,6 +99,13 @@ const AddProduct = () => {
     console.log("Checked allergen is an ingredient");
   };
 
+  const handleProdName = (e) => {
+    setProdName(e.target.value);
+  };
+
+  const handleProdVar = (e) => {
+    setProdVar(e.target.value);
+  };
   const handleReset = () => {
     setAllergens([]);
     setIngredients([]);
@@ -104,39 +113,99 @@ const AddProduct = () => {
     setIsAllergen("");
   };
 
+  const handleAddProduct = () => {};
+
   return (
-    <>
+    <div id="pagePanel">
       <h1>Add Product</h1>
-      <input
-        type="text"
-        value={currIngred}
-        id="ingredientInput"
-        onInput={handleCurrIngred}
-        placeholder="Add New Ingredient"
-      ></input>
-      <label htmlFor="allergenCheck">Ingredient is an allergen</label>
-      <input
-        type="checkbox"
-        value={isAllergen}
-        id="allergenCheck"
-        onChange={handleIsAllergen}
-      ></input>
-      <button onClick={handleIngredient}>+</button>
-      <button onClick={handleReset}>Reset Ingredients</button>
-      <p>{infoNotif}</p>
-      <p>Current Ingredients:</p>
-      <ul>
-        {ingredients.map((e, i) => {
-          return <li key={i}>{ingredients[i]}</li>;
-        })}
-      </ul>
-      <p>Current Allergens:</p>
-      <ul>
-        {allergens.map((e, i) => {
-          return <li key={i}>{allergens[i]}</li>;
-        })}
-      </ul>
-    </>
+      <div id="pageContent">
+        <div id="inputRow" style={{ justifyContent: "start" }}>
+          <input
+            id="prodName"
+            value={prodName}
+            type="text"
+            placeholder="Name"
+            onInput={handleProdName}
+          ></input>
+          <label htmlFor="prodName">Product Name</label>
+        </div>
+        <div id="inputRow" style={{ justifyContent: "start" }}>
+          <input
+            type="text"
+            value={prodVar}
+            placeholder="Variant Name"
+            onInput={handleProdVar}
+          ></input>
+          <label htmlFor="prodVar">Product Variant (Optional)</label>
+        </div>
+        <div id="inputRow">
+          <input
+            type="text"
+            value={currIngred}
+            id="ingredientInput"
+            onInput={handleCurrIngred}
+            placeholder="Add New Ingredient"
+          ></input>
+          <label htmlFor="allergenCheck">Ingredient is an allergen</label>
+          <input
+            type="checkbox"
+            value={isAllergen}
+            id="allergenCheck"
+            onChange={handleIsAllergen}
+            style={{ width: "min-content" }}
+          ></input>
+        </div>
+        <div id="inputRow">
+          <button onClick={handleIngredient} className="plus">
+            +
+          </button>
+          <button onClick={handleReset}>Reset Ingredients</button>
+        </div>
+        <p>{infoNotif}</p>
+      </div>
+      <div id="pageContent">
+        <p
+          style={{
+            fontSize: "14pt",
+            fontWeight: "500",
+            textAlign: "left",
+            alignSelf: "stretch",
+            paddingInline: "1rem",
+          }}
+        >
+          Current Ingredients:
+        </p>
+        <ul>
+          {ingredients.map((e, i) => {
+            return <li key={i}>{ingredients[i]}</li>;
+          })}
+        </ul>
+        <p
+          style={{
+            fontSize: "14pt",
+            fontWeight: "500",
+            textAlign: "left",
+            alignSelf: "stretch",
+            paddingInline: "1rem",
+          }}
+        >
+          Current Allergens:
+        </p>
+        <ul>
+          {allergens.map((e, i) => {
+            return <li key={i}>{allergens[i]}</li>;
+          })}
+        </ul>
+        <button
+          style={{
+            alignSelf: "center",
+          }}
+          onClick={handleAddProduct}
+        >
+          Add Product To Database
+        </button>
+      </div>
+    </div>
   );
 };
 
