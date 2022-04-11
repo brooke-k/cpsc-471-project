@@ -3,6 +3,7 @@ import { Router, Routes, Route, Link } from "react-router-dom";
 import axiosJSONInst from "../axios";
 import { ProvTer } from "../components/constant/Provinces-Territories";
 import { RetailRegion } from "../components/constant/RetailRegions";
+import "../styles/auth.scss";
 
 const SignUp = () => {
   const userType = ["Individual", "Manufacturer", "Administrator"];
@@ -59,182 +60,166 @@ const SignUp = () => {
   function accountOptions() {
     if (selectedType === userType[0]) {
       return (
-        <div>
-          <div>
-            <div>
-              <label htmlFor="usrNme">Username</label>
-              <input
-                type="text"
-                placeholder="Username"
-                value={usrNme}
-                onChange={handleUsername}
-                id="usrNme"
-              />
-            </div>
-            <div>
-              <label htmlFor="email">Email Address</label>
-              <input
-                type="email"
-                placeholder="Email"
-                value={emailAddr}
-                onChange={handleEmail}
-                id="email"
-              />
-            </div>
-            <div>
-              <label htmlFor="pwrd">Password</label>
-              <input
-                type="password"
-                placeholder="Password"
-                value={pwrd}
-                onChange={handlePassword}
-                id="pwrd"
-              />
-            </div>
-            <label htmlFor="retailReg">Retail Region</label>
-            <select id="retailReg" onChange={handleRetailReg}>
-              {RetailRegion.map((e, i) => {
-                return (
-                  <option key={i} value={RetailRegion[i]}>
-                    {RetailRegion[i]}
-                  </option>
-                );
-              })}
-            </select>
-          </div>
+        <>
+          <label htmlFor="usrNme">Username</label>
+          <input
+            type="text"
+            placeholder="Username"
+            value={usrNme}
+            onChange={handleUsername}
+            id="usrNme"
+          />
+
+          <label htmlFor="email">Email Address</label>
+          <input
+            type="email"
+            placeholder="Email"
+            value={emailAddr}
+            onChange={handleEmail}
+            id="email"
+          />
+
+          <label htmlFor="pwrd">Password</label>
+          <input
+            type="password"
+            placeholder="Password"
+            value={pwrd}
+            onChange={handlePassword}
+            id="pwrd"
+          />
+
+          <label htmlFor="retailReg">Retail Region</label>
+          <select id="retailReg" onChange={handleRetailReg}>
+            {RetailRegion.map((e, i) => {
+              return (
+                <option key={i} value={RetailRegion[i]}>
+                  {RetailRegion[i]}
+                </option>
+              );
+            })}
+          </select>
+
           <button onClick={createRegularUser}>Sign Up</button>
-        </div>
+        </>
       );
     } else if (selectedType === userType[1]) {
       return (
-        <div>
-          <div>
-            <label htmlFor="nme">Manufacturer Name</label>
-            <input
-              type="text"
-              placeholder="Name"
-              value={nme}
-              onChange={handleName}
-              id="nme"
-            />
-            <div>
-              <label htmlFor="usrNme">Username</label>
-              <input
-                type="text"
-                placeholder="Username"
-                value={usrNme}
-                onChange={handleUsername}
-                id="usrNme"
-              />
-            </div>
-            <div>
-              <label htmlFor="email">Email Address</label>
-              <input
-                type="email"
-                placeholder="Email"
-                value={emailAddr}
-                onChange={handleEmail}
-                id="email"
-              />
-            </div>
-            <div>
-              <label htmlFor="phoneNo">Phone Number</label>
-              <input
-                type="phoneNo"
-                placeholder="Phone Number"
-                value={phoneNo}
-                onChange={handlePhone}
-                id="phoneNo"
-              />
-            </div>
-            <div>
-              <label htmlFor="pwrd">Password</label>
-              <input
-                type="password"
-                placeholder="Password"
-                value={pwrd}
-                onChange={handlePassword}
-                id="pwrd"
-              />
-            </div>
-          </div>
-          <div>
-            <label htmlFor="street">Headquarters Address</label>
-            <input
-              id="street"
-              value={strt}
-              placeholder="Street Number"
-              onChange={handleStreet}
-              type="text"
-            />
-          </div>
-          <div>
-            <input
-              id="city"
-              value={cty}
-              placeholder="City"
-              onChange={handleCity}
-              type="text"
-            />
-          </div>
-          <div>
-            <select id="province" onChange={handleProvince}>
-              {ProvTer.map((e, i) => {
-                return (
-                  <option key={i} value={ProvTer[i]}>
-                    {ProvTer[i]}
-                  </option>
-                );
-              })}
-            </select>
-          </div>
-          <div>
-            <input
-              id="zipCode"
-              value={zipCode}
-              placeholder="Zip Code"
-              onChange={handleZip}
-              type="text"
-            />
-          </div>
+        <>
+          <label htmlFor="nme">Manufacturer Name</label>
+          <input
+            type="text"
+            placeholder="Name"
+            value={nme}
+            onChange={handleName}
+            id="nme"
+          />
+
+          <label htmlFor="usrNme">Username</label>
+          <input
+            type="text"
+            placeholder="Username"
+            value={usrNme}
+            onChange={handleUsername}
+            id="usrNme"
+          />
+
+          <label htmlFor="email">Email Address</label>
+          <input
+            type="email"
+            placeholder="Email"
+            value={emailAddr}
+            onChange={handleEmail}
+            id="email"
+          />
+
+          <label htmlFor="phoneNo">Phone Number</label>
+          <input
+            type="phoneNo"
+            placeholder="Phone Number"
+            value={phoneNo}
+            onChange={handlePhone}
+            id="phoneNo"
+          />
+
+          <label htmlFor="pwrd">Password</label>
+          <input
+            type="password"
+            placeholder="Password"
+            value={pwrd}
+            onChange={handlePassword}
+            id="pwrd"
+          />
+
+          <label htmlFor="street">Headquarters Address</label>
+          <input
+            id="street"
+            value={strt}
+            placeholder="Street Number"
+            onChange={handleStreet}
+            type="text"
+          />
+
+          <input
+            id="city"
+            value={cty}
+            placeholder="City"
+            onChange={handleCity}
+            type="text"
+          />
+
+          <select id="province" onChange={handleProvince}>
+            {ProvTer.map((e, i) => {
+              return (
+                <option key={i} value={ProvTer[i]}>
+                  {ProvTer[i]}
+                </option>
+              );
+            })}
+          </select>
+
+          <input
+            id="zipCode"
+            value={zipCode}
+            placeholder="Zip Code"
+            onChange={handleZip}
+            type="text"
+          />
+
           <button onClick={createManufacturer}>Sign Up</button>
-        </div>
+        </>
       );
     } else if (selectedType === userType[2]) {
       return (
-        <div>
-          <div>
-            <label htmlFor="usrNme">Username</label>
-            <input
-              type="text"
-              placeholder="Username"
-              value={usrNme}
-              onChange={handleUsername}
-              id="usrNme"
-            />
-          </div>
-          <div>
-            <label htmlFor="email">Email Address</label>
-            <input
-              type="email"
-              placeholder="Email"
-              value={emailAddr}
-              onChange={handleEmail}
-              id="email"
-            />
-          </div>
-          <div>
-            <label htmlFor="pwrd">Password</label>
-            <input
-              type="password"
-              placeholder="Password"
-              value={pwrd}
-              onChange={handlePassword}
-              id="pwrd"
-            />
-          </div>
+        <>
+          <label htmlFor="usrNme">Username</label>
+          <input
+            type="text"
+            placeholder="Username"
+            value={usrNme}
+            onChange={handleUsername}
+            id="usrNme"
+          />
+
+          <label htmlFor="email">Email Address</label>
+          <input
+            type="email"
+            placeholder="Email"
+            value={emailAddr}
+            onChange={handleEmail}
+            id="email"
+          />
+
+          <label htmlFor="pwrd">Password</label>
+          <input
+            type="password"
+            placeholder="Password"
+            value={pwrd}
+            onChange={handlePassword}
+            id="pwrd"
+          />
+
           <button onClick={createAdmin}>Sign Up</button>
-        </div>
+        </>
       );
     } else {
       return (
@@ -346,9 +331,9 @@ const SignUp = () => {
   };
 
   return (
-    <div>
-      <h1>Sign Up</h1>
-      <div>
+    <div id="contentPanel">
+      <div className="authPanel">
+        <h1>Sign Up</h1>
         <label htmlFor="accountTypeSelect">Select Account Type</label>
         <select id="accountTypeSelect" onChange={handleAccountType}>
           {userType.map((e, i) => {
@@ -359,10 +344,10 @@ const SignUp = () => {
             );
           })}
         </select>
+        {accountOptions()}
+        {errNotif}
+        <Link to="/login">Log in instead</Link>
       </div>
-      {accountOptions()}
-      {errNotif}
-      <Link to="/login">Log in instead</Link>
     </div>
   );
 };

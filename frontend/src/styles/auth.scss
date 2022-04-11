@@ -1,0 +1,149 @@
+@import "./base.scss";
+
+#contentPanel {
+  background-color: white;
+  border-radius: 5rem;
+  box-shadow: 1em 0.5em 2em 0em #00000060, 2em 1em 4em 0em #00000030;
+  border-width: 0.4ch;
+  border-style: solid;
+  border-color: #00000060;
+  align-content: space-around;
+  justify-content: space-around;
+  align-items: center;
+  justify-items: center;
+  flex-flow: column;
+  margin: 0;
+  padding: 0;
+  width: 30%;
+  height: auto;
+  justify-self: center;
+  align-self: center;
+}
+
+#contentPanel .authPanel {
+
+  padding: 2% 5%;
+  text-align: center;
+  display: flex;
+  flex-flow: column wrap;
+  align-content: space-around;
+  justify-content: space-evenly;
+  align-self: stretch;
+  justify-self: stretch;
+  font-size: 14pt;
+  margin: 1rem;
+  row-gap: 10px;
+  height: inherit;
+}
+
+.authPanel>input {
+  justify-self: center;
+  width: 70%;
+  align-self: center;
+  font-size: 14pt;
+  text-align: center;
+  background-color: whitesmoke;
+  border-radius: 1ch;
+  border-style: solid;
+  border-color: #00000060;
+  font-weight: 400;
+  flex-shrink: 1;
+
+}
+
+.authPanel>h1 {
+  font-size: 24pt;
+  font-weight: 800;
+  text-transform: uppercase;
+  margin: 0;
+  padding: 1ch 0 0 0;
+  letter-spacing: 2px;
+}
+
+.authPanel>label {
+  justify-self: center;
+  width: 60%;
+  align-self: center;
+  font-size: 14pt;
+  text-align: center;
+  border-radius: 1ch;
+  margin: 0;
+  padding: 0;
+  font-weight: 500;
+  flex-shrink: 1;
+
+}
+
+.authPanel>button {
+  border-style: solid;
+  border-color: #00000060;
+  color: white;
+  background: seagreen;
+  text-decoration: none;
+  font-weight: 500;
+  font-size: 14pt;
+  padding: 0.5ch;
+  transition: 75ms;
+  width: fit-content;
+  align-self: center;
+  justify-self: center;
+  padding: 0.5ch 4ch;
+  border-radius: 1ch;
+  text-transform: uppercase;
+}
+
+
+.authPanel>a:any-link {
+  justify-self: center;
+  width: 70%;
+  align-self: center;
+  font-size: 14pt;
+  font-weight: 600;
+  text-align: center;
+  border-radius: 1ch;
+  margin: 0;
+  padding: 0.5ch;
+  text-decoration: underline;
+  color: dimgray
+}
+
+.authPanel>a:any-link:active {
+  justify-self: center;
+  width: 70%;
+  align-self: center;
+  font-size: 14pt;
+  font-weight: 600;
+  text-align: center;
+  border-radius: 1ch;
+  margin: 0;
+  padding: 0.5ch;
+  text-decoration: underline;
+  color: mediumseagreen
+}
+
+.authPanel>button:hover {
+  color: white;
+  background: mediumseagreen;
+
+}
+
+.authPanel>button:active {
+  color: lightgreen;
+  background: darkgreen;
+
+}
+
+.authPanel>select {
+  align-self: center;
+  justify-self: stretch;
+  font-size: 14pt;
+  margin: 0.25ch;
+  padding: 0.25ch 1ch;
+  width: 65%;
+  border-radius: 1ch;
+  border-style: none;
+  border-style: solid;
+  border-color: #00000060;
+  background-color: whitesmoke;
+  color: #000;
+}

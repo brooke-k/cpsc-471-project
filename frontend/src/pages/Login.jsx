@@ -74,97 +74,86 @@ const Login = () => {
   function accountOptions() {
     if (selectedType === userType[0]) {
       return (
-        <div>
-          <div>
-            <div>
-              <label htmlFor="usrNme">Username</label>
-              <input
-                type="text"
-                placeholder="Username"
-                value={usrNme}
-                onChange={handleUsername}
-                id="usrNme"
-              />
-            </div>
-            <div>
-              <label htmlFor="email">Email Address</label>
-              <input
-                type="email"
-                placeholder="Email"
-                value={emailAddr}
-                onChange={handleEmail}
-                id="email"
-              />
-            </div>
-            <div>
-              <label htmlFor="pwrd">Password</label>
-              <input
-                type="password"
-                placeholder="Password"
-                value={pwrd}
-                onChange={handlePassword}
-                id="pwrd"
-              />
-            </div>
-          </div>
+        <>
+          <label htmlFor="usrNme">Username</label>
+          <input
+            type="text"
+            placeholder="Username"
+            value={usrNme}
+            onChange={handleUsername}
+            id="usrNme"
+          />
+
+          <label htmlFor="email">Email Address</label>
+          <input
+            type="email"
+            placeholder="Email"
+            value={emailAddr}
+            onChange={handleEmail}
+            id="email"
+          />
+
+          <label htmlFor="pwrd">Password</label>
+          <input
+            type="password"
+            placeholder="Password"
+            value={pwrd}
+            onChange={handlePassword}
+            id="pwrd"
+          />
+
           <button onClick={verifyNonAdmin}>Log In</button>
-        </div>
+        </>
       );
     } else if (selectedType === userType[1]) {
       return (
-        <div>
-          <div>
-            <div>
-              <label htmlFor="usrNme">Username</label>
-              <input
-                type="text"
-                placeholder="Username"
-                value={usrNme}
-                onChange={handleUsername}
-                id="usrNme"
-              />
-            </div>
-            <div>
-              <label htmlFor="email">Email Address</label>
-              <input
-                type="email"
-                placeholder="Email"
-                value={emailAddr}
-                onChange={handleEmail}
-                id="email"
-              />
-            </div>
-            <div>
-              <label htmlFor="admID">Administrator ID Number</label>
-              <input
-                type="text"
-                placeholder="admID"
-                value={admID}
-                onChange={handleAdmID}
-                id="email"
-              />
-            </div>
-            <div>
-              <label htmlFor="pwrd">Password</label>
-              <input
-                type="password"
-                placeholder="Password"
-                value={pwrd}
-                onChange={handlePassword}
-                id="pwrd"
-              />
-            </div>
-          </div>
+        <>
+          <label htmlFor="usrNme">Username</label>
+          <input
+            type="text"
+            placeholder="Username"
+            value={usrNme}
+            onChange={handleUsername}
+            id="usrNme"
+          />
+
+          <label htmlFor="email">Email Address</label>
+          <input
+            type="email"
+            placeholder="Email"
+            value={emailAddr}
+            onChange={handleEmail}
+            id="email"
+          />
+
+          <label htmlFor="admID">Administrator ID Number</label>
+          <input
+            type="text"
+            placeholder="Administrator ID"
+            value={admID}
+            onChange={handleAdmID}
+            id="email"
+          />
+
+          <label htmlFor="pwrd">Password</label>
+          <input
+            type="password"
+            placeholder="Password"
+            value={pwrd}
+            onChange={handlePassword}
+            id="pwrd"
+          />
+
           <button onClick={verifyAdmin}>Log In</button>
-        </div>
+        </>
       );
     }
   }
 
   return (
-    <div>
-      <h1>Log In</h1>
-      <div>
+    <div id="contentPanel">
+      <div className="authPanel">
+        <h1>Log In</h1>
         <label htmlFor="accountTypeSelect">Select Account Type</label>
         <select id="accountTypeSelect" onChange={handleAccountType}>
           {userType.map((e, i) => {
@@ -175,10 +164,10 @@ const Login = () => {
             );
           })}
         </select>
+        {accountOptions()}
+        {errNotif}
+        <Link to="/signup">Sign up instead</Link>
       </div>
-      {accountOptions()}
-      {errNotif}
-      <Link to="/signup">Sign up instead</Link>
     </div>
   );
 };
