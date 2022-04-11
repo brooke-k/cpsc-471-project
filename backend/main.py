@@ -7,11 +7,12 @@ import json
 from bson import json_util
 from pydantic import BaseModel, Field
 from fastapi.middleware.cors import CORSMiddleware
-from routers import user, product
+from routers import user, product, testing
 
 ThisApp = FastAPI()
 ThisApp.include_router(user.apiRouter)
 ThisApp.include_router(product.apiRouter)
+ThisApp.include_router(testing.apiRouter)
 
 def parse_json(data):
     return json.loads(json_util.dumps(data))

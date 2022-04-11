@@ -62,7 +62,6 @@ const AddProduct = () => {
       setInfoNotif(
         "Ingredients can only contain letters, numbers, hyphens, or spaces."
       );
-
       return;
     }
     for (let i = 0; i < ingredients.length; i++) {
@@ -122,23 +121,11 @@ const AddProduct = () => {
       .post("/product/create", {
         name: prodName,
         manufacturer_name: manuName,
+        ingredients: ingredients,
+        allergens: allergens,
       })
       .then((res) => {
         console.log(res);
-        prodID = res.data.id_number;
-        for (let i = 0; i < ingredients.length; i++) {
-          axiosJSONInst
-            .post("/product/create/ingredient", {
-              ingredient_name: ingredients[i],
-              product_id: prodID,
-              product_name: prodName,
-            })
-            .then((res) => console.log(res))
-            .catch((err) => {
-              console.log(err);
-              return;
-            });
-        }
       });
   };
 

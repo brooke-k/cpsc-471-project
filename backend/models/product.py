@@ -21,6 +21,8 @@ class ProductBase(BaseModel):
   _id: Field(default_factory=PyObjectId, alias="_id")
   name: str
   manufacturer_name: str
+  ingredients: list
+  allergens: list
   class Config:
     allow_population_by_field_name = True
     arbitrary_types_allowed = True
@@ -32,20 +34,22 @@ class Product(BaseModel):
   name: str
   id_number: str
   manufacturer_name: str
+  ingredients: list
+  allergens: list
   class Config:
     allow_population_by_field_name = True
     arbitrary_types_allowed = True
     json_encoders = {ObjectId: str}
 
-class Ingredient(BaseModel):
-  _id: Field(default_factory=PyObjectId, alias="_id")
-  ingredient_name: str
-  product_name: str
-  product_id: str
-  class Config:
-    allow_population_by_field_name = True
-    arbitrary_types_allowed = True
-    json_encoders = {ObjectId: str}
+# class Ingredient(BaseModel):
+#   _id: Field(default_factory=PyObjectId, alias="_id")
+#   ingredient_name: str
+#   product_name: str
+#   product_id: str
+#   class Config:
+#     allow_population_by_field_name = True
+#     arbitrary_types_allowed = True
+#     json_encoders = {ObjectId: str}
 
 class NotableAllergen(BaseModel):
   _id: Field(default_factory=PyObjectId, alias="_id")
@@ -69,11 +73,10 @@ class Alert(BaseModel):
     arbitrary_types_allowed = True
     json_encoders = {ObjectId: str}
 
-class IngredientsList(BaseModel):
-  _id: Field(default_factory=PyObjectId, alias="_id")
-  ingredients: List[Ingredient]
-
-  class Config:
-    allow_population_by_field_name = True
-    arbitrary_types_allowed = True
-    json_encoders = {ObjectId: str}
+# class IngredientsList(BaseModel):
+#   _id: Field(default_factory=PyObjectId, alias="_id")
+#   ingredients: List[Ingredient]
+#   class Config:
+#     allow_population_by_field_name = True
+#     arbitrary_types_allowed = True
+#     json_encoders = {ObjectId: str}

@@ -20,7 +20,6 @@ manufactCollect = "user-manufacturer"
 adminCollect = "user-administrator"
 productCollect = "product"
 
-
 # Create a new regular use and add it to the database
 @apiRouter.post("/create/regular", response_description="Create a new regular user")
 async def create_user(user: user.RegularUser):
@@ -48,20 +47,7 @@ async def create_user(base_user: user.RegularUser):
   else:
       raise HTTPException(status_code=400, detail="There already exists a user with that email.")
 
-@apiRouter.get("/verify/non_admin", response_model=user.UserBase)
-async def get_user(email: str, password: str):
-  if (userCheck := config.db[regularCollect].find_one({"email":email, "password":password})) is not None or (userCheck := config.db[manufactCollect].find_one({"email":email, "password":password})):
-    return userCheck
-  else:
-    raise HTTPException(status_code=400, detail="A user with that email and password could not be found")
-
-@apiRouter.get("/verify/admin", response_model=AdminBase)
-async def get_user(username: str, email: str, password: str, admin_id: str):
-  if (userCheck := config.db[adminCollect].find_one({"admin_id": admin_id, "email":email, "password":password})):
-    return userCheck
-  else:
-    raise HTTPException(status_code=400, detail="An administrator with that email, password, and adminID could not be found")
-
+# Creates a manufacturer user account
 @apiRouter.post("/create/manufacturer", response_description="Create a new manufacturer user")
 async def create_user(user: user.Manufacturer):
   if (notExistant := config.db[regularCollect].find_one({"email":user.email})) is None and (notExistant := config.db[manufactCollect].find_one({"email":user.email})) is None and (notExistant := config.db[adminCollect].find_one({"email":user.email})) is None and (notExistant := config.db[manufactCollect].find_one({"name":user.name})) is None:
@@ -74,7 +60,25 @@ async def create_user(user: user.Manufacturer):
   else:
       raise HTTPException(status_code=400, detail="There already exists a manufacturer with that email or name. ")
 
+# Verifies a non-administrator (manufacturer or regular) user at login
+@apiRouter.get("/verify/non_admin", response_model=user.UserBase)
+async def get_user(email: str, password: str):
+  if (userCheck := config.db[regularCollect].find_one({"email":email, "password":password})) is not None or (userCheck := config.db[manufactCollect].find_one({"email":email, "password":password})):
+    return userCheck
+  else:
+    raise HTTPException(status_code=400, detail="A user with that email and password could not be found")
 
+# Verifies an administrator (not manufacturer nor regular) user at login
+@apiRouter.get("/verify/admin", response_model=AdminBase)
+async def get_user(username: str, email: str, password: str, admin_id: str):
+  if (userCheck := config.db[adminCollect].find_one({"admin_id": admin_id, "email":email, "password":password})):
+    return userCheck
+  else:
+    raise HTTPException(status_code=400, detail="An administrator with that email, password, and adminID could not be found")
+
+
+# Removes the user (any kind) from the database. An Admin_id number must be provided if the account to be deleted is an admin account.
+# Otherwise, just the account's email and password is needed.
 @apiRouter.delete("/remove")
 async def delete_user(email: str, password: str, admin_id: Optional[str] = None):
   if (userCheck := config.db[regularCollect].find_one({"email":email, "password":password})) is not None: #i.e. the user was found in regular
@@ -82,13 +86,14 @@ async def delete_user(email: str, password: str, admin_id: Optional[str] = None)
       deletedb_return =  config.db[regularCollect].delete_one({"email":email})
       if deletedb_return.deleted_count == 1:
          return JSONResponse(status_code=status.HTTP_204_NO_CONTENT)
-  if (userCheck := config.db[manufactCollect].find_one({"email":email, "password":password})) is not None: #i.e. the user was found in regular
-       user_id = userCheck['_id']
+  if (userCheck := config.db[manufactCollect].find_one({"email":email, "password":password})) is not None: #i.e. the user was found in manufacturer
+       user_name = userCheck['name']
        deletedb_return =  config.db[manufactCollect].delete_one({"email":email})
        if deletedb_return.deleted_count == 1:
+          config.db[productCollect].delete_many({"manufacturer_name": user_name})
           return JSONResponse(status_code=status.HTTP_204_NO_CONTENT)
   if admin_id is not None:
-    if (userCheck := config.db[adminCollect].find_one({"email":email, "password":password, "admin_id":admin_id})) is not None: #i.e. the user was found in regular
+    if (userCheck := config.db[adminCollect].find_one({"email":email, "password":password, "admin_id":admin_id})) is not None: #i.e. the user was found in administrator
         user_id = userCheck['_id']
         deletedb_return =  config.db[adminCollect].delete_one({"_id":user_id})
         if deletedb_return.deleted_count == 1:
