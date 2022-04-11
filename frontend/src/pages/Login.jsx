@@ -107,7 +107,6 @@ const Login = () => {
             onChange={handleAdmID}
             id="email"
           />
-
           <label htmlFor="pwrd">Password</label>
           <input
             type="password"
@@ -116,7 +115,6 @@ const Login = () => {
             onChange={handlePassword}
             id="pwrd"
           />
-
           <button onClick={verifyAdmin}>Log In</button>
         </>
       );

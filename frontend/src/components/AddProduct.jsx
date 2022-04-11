@@ -13,10 +13,8 @@ const AddProduct = () => {
   const [currIngred, setCurrIngred] = useState("");
   const [isAllergen, setIsAllergen] = useState(false);
   const [ingredients, setIngredients] = useState([]);
+  const [allergens, setAllergens] = useState([]);
 
-  //var ingredients = [];
-
-  const allergens = [];
   const topAllergens = [
     /EGG/,
     /MILK/,
@@ -46,10 +44,18 @@ const AddProduct = () => {
     return;
   }
 
+  function addAllergens(aller) {
+    const newAllergyList = allergens.concat([aller]);
+    setAllergens(newAllergyList);
+    return;
+  }
+
   const handleIngredient = () => {
     console.log("Handling ingredient " + currIngred);
     const notLetterAlphaDash = /[^A-Z1-9-]+/;
     const newIngred = currIngred.toUpperCase();
+    setCurrIngred("");
+    setIsAllergen("");
     if (newIngred.match(notLetterAlphaDash) !== null) {
       setInfoNotif(
         "Ingredients can only contain letters, numbers, hyphens, or spaces."
@@ -57,7 +63,6 @@ const AddProduct = () => {
 
       return;
     }
-
     for (let i = 0; i < ingredients.length; i++) {
       if (
         newIngred.match(RegExp(ingredients[i])) !== null &&
@@ -66,27 +71,24 @@ const AddProduct = () => {
         setInfoNotif(
           newIngred + " has already been added to the ingredients list."
         );
-
         return;
       }
     }
-
+    addIngredient(newIngred);
     if (isAllergen) {
-      allergens.push(newIngred);
+      addAllergens(newIngred);
       setInfoNotif(newIngred + " added (included in allergens)");
       return;
     } else {
       for (let i = 0; i < topAllergens.length; i++) {
         if (newIngred.match(topAllergens[i]) !== null) {
-          addIngredient(newIngred);
+          addAllergens(newIngred);
           setInfoNotif(newIngred + " added (included in allergens)");
           setIsAllergen(false);
-
           return;
         }
       }
     }
-    addIngredient(newIngred);
     setInfoNotif(newIngred + " added (not included in allergens)");
   };
 
@@ -95,10 +97,16 @@ const AddProduct = () => {
     console.log("Checked allergen is an ingredient");
   };
 
+  const handleReset = () => {
+    setAllergens([]);
+    setIngredients([]);
+    setCurrIngred("");
+    setIsAllergen("");
+  };
+
   return (
     <>
       <h1>Add Product</h1>
-      <p>{infoNotif}</p>
       <input
         type="text"
         value={currIngred}
@@ -114,10 +122,18 @@ const AddProduct = () => {
         onChange={handleIsAllergen}
       ></input>
       <button onClick={handleIngredient}>+</button>
+      <button onClick={handleReset}>Reset Ingredients</button>
+      <p>{infoNotif}</p>
       <p>Current Ingredients:</p>
       <ul>
         {ingredients.map((e, i) => {
           return <li key={i}>{ingredients[i]}</li>;
+        })}
+      </ul>
+      <p>Current Allergens:</p>
+      <ul>
+        {allergens.map((e, i) => {
+          return <li key={i}>{allergens[i]}</li>;
         })}
       </ul>
     </>
