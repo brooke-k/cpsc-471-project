@@ -10,19 +10,25 @@ from fastapi.middleware.cors import CORSMiddleware
 from models import product
 from models.product import ProductBase, Product
 import uuid
+from typing import List
+import pandas as pd
+
 
 def parse_json(data):
     return json.loads(json_util.dumps(data))
 
+## TO BE SEARCHED BY
+# Product Name
+# Contains ingredient
+# Does not contain ingredient
+# Contains Allergen
+# Does not contain allergen
 
 apiRouter = APIRouter(prefix="/product", tags=["product"])
 
 productCollect = "product"
 alertCollect= "product-alert"
-allergenCollect = "product-allergen"
-manuProdCollect = "product-manufacturer"
 manufactCollect = "user-manufacturer"
-ingredientCollect = "product-ingredient"
 
 
 @apiRouter.post("/create", response_description="Add a new product to the database")
@@ -51,9 +57,26 @@ async def create_product(prod: product.ProductBase):
 #   else:
 #     raise HTTPException(status_code=404, detail="Product could not be found in the database.")
 
-@apiRouter.get("/get/ingredients/by_product")
-async def get_ingredients(product_id:str):
-  if( productCheck := config.db[productCollect].find_many({"product_id":product_id})) is not None:
-    return productCheck.ingredient
+# @apiRouter.get("/get/ingredients/by_product")
+# async def get_ingredients(product_id:str):
+#   if( productCheck := config.db[productCollect].find_many({"product_id":product_id})) is not None:
+#     return productCheck.ingredient
+#   else:
+#     raise HTTPException(status_code=400, detail="A product with that id number could not be found")
+
+
+#search by name
+@apiRouter.get("/search/productName", response_model=List[product.Product])
+async def get_productByName(name:str):
+  if(productInfo := list(config.db[productCollect].find({"name":name}))) is not None:
+    return productInfo
   else:
-    raise HTTPException(status_code=400, detail="A product with that id number could not be found")
+    raise HTTPException(status_code=400, detail="A product with that name could not be found")
+
+#search by contains ingredient
+# @apiRouter.get("/search/ingredients/contains")
+# async def get_productByIngredients(ingredient: list):
+#   if(productInfo := config.db[productCollect].find_many({"name":name})) is not None:
+#     return productInfo
+#   else:
+#     raise HTTPException(status_code=400, detail="A product with that name could not be found")
