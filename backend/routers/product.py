@@ -1,4 +1,4 @@
-from fastapi import FastAPI, HTTPException, status, Body, Form, APIRouter
+from fastapi import FastAPI, HTTPException, status, Body, Form, APIRouter, Query
 from typing import Optional
 import config, uvicorn, os, model
 from fastapi.encoders import jsonable_encoder
@@ -74,9 +74,33 @@ async def get_productByName(name:str):
     raise HTTPException(status_code=400, detail="A product with that name could not be found")
 
 #search by contains ingredient
-# @apiRouter.get("/search/ingredients/contains")
-# async def get_productByIngredients(ingredient: list):
-#   if(productInfo := config.db[productCollect].find_many({"name":name})) is not None:
-#     return productInfo
-#   else:
-#     raise HTTPException(status_code=400, detail="A product with that name could not be found")
+@apiRouter.get("/search/ingredients/contains", response_model=List[product.Product])
+async def get_productByIngredients(ingredientList: Optional[List[str]] = Query(None)):
+  if(productInfo := list(config.db[productCollect].find({"ingredients":{"$in":ingredientList}}))) is not None:
+    return productInfo
+  else:
+    raise HTTPException(status_code=400, detail="A product with those ingredients could not be found")
+
+#search by does not contains ingredient
+@apiRouter.get("/search/ingredients/notContains", response_model=List[product.Product])
+async def get_productByIngredients(ingredientList: Optional[List[str]] = Query(None)):
+  if(productInfo := list(config.db[productCollect].find({"ingredients":{"$nin":ingredientList}}))) is not None:
+    return productInfo
+  else:
+    raise HTTPException(status_code=400, detail="A product without those ingredients could not be found")
+
+#search by contains allergens
+@apiRouter.get("/search/allergens/contains", response_model=List[product.Product])
+async def get_productByIngredients(allergenList: Optional[List[str]] = Query(None)):
+  if(productInfo := list(config.db[productCollect].find({"allergens":{"$in":allergenList}}))) is not None:
+    return productInfo
+  else:
+    raise HTTPException(status_code=400, detail="A product with those allergens could not be found")
+
+#search by does not contains allergens
+@apiRouter.get("/search/allergens/notContains", response_model=List[product.Product])
+async def get_productByIngredients(allergenList: Optional[List[str]] = Query(None)):
+  if(productInfo := list(config.db[productCollect].find({"allergens":{"$nin":allergenList}}))) is not None:
+    return productInfo
+  else:
+    raise HTTPException(status_code=400, detail="A product without those allergens could not be found")
