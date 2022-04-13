@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import axiosJSONInst from "../axios";
 import { Link } from "react-router-dom";
+import "../styles/auth.scss";
 
 const Login = () => {
   const userType = ["Non-Admin", "Administrator"];
