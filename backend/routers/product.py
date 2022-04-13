@@ -10,8 +10,9 @@ from fastapi.middleware.cors import CORSMiddleware
 from models import product
 from models.product import ProductBase, Product
 import uuid
-from typing import List
+from typing import List, Pattern
 import pandas as pd
+import re
 
 
 def parse_json(data):
@@ -104,3 +105,12 @@ async def get_productByIngredients(allergenList: Optional[List[str]] = Query(Non
     return productInfo
   else:
     raise HTTPException(status_code=400, detail="A product without those allergens could not be found")
+
+# search by contains and does not contain, uses RegEx. Things to MATCH (i.e. they exist in the database) should be formatted as ^\(<your_search_term_here>\)$. Things NOT to match should be formatted as ^((?!<your_search_term_here>).)*$
+# These values can be sent in as a string value.
+@apiRouter.get("/search/ingedients_allergens/contains_and_notcontains", response_model=List[product.Product])
+async def get_productByIngredientsAllergens(includeIngredients: Optional[List[Pattern]] = Query( [r"[.]"]), includeAllergens:Optional[List[Pattern]] = Query( [r"[.]"]), excludeAllergens:Optional[List[Pattern]] = Query([r"[.]"]), excludeIngredients:Optional[List[Pattern]] = Query( [r"[.]"])):
+  if (productInfo := list(config.db[productCollect].find({"allergens": {"$in": includeAllergens}, "ingredients": {"$in":includeIngredients}}))) != []:
+    return productInfo
+  else:
+    raise HTTPException(status_code=400, detail="A product matching search criteria could not be found")
