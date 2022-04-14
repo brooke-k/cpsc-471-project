@@ -18,6 +18,8 @@ class PyObjectId(ObjectId):
     async def __modify_schema__(cls, field_schema):
         field_schema.update(type="string")
 
+
+
 class ProductBase(BaseModel):
   _id: Field(default_factory=PyObjectId, alias="_id")
   name: str
@@ -37,6 +39,13 @@ class Product(BaseModel):
   manufacturer_name: str
   ingredients: list
   allergens: list
+  class Config:
+    allow_population_by_field_name = True
+    arbitrary_types_allowed = True
+    json_encoders = {ObjectId: str}
+
+class ProductReturn(BaseModel):
+  products: list
   class Config:
     allow_population_by_field_name = True
     arbitrary_types_allowed = True
