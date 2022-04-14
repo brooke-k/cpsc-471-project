@@ -6,6 +6,8 @@ import SignUp from "./pages/SignUp";
 import "./styles/base.scss";
 import Home from "./pages/Home";
 import ProductSearch from "./pages/ProductSearch";
+import NavButtons from "./components/navButtons";
+import AddProduct from "./pages/AddProduct";
 
 const App = () => {
   return (
@@ -16,9 +18,11 @@ const App = () => {
           <Route path="/login" element={<Login />}></Route>
           <Route path="/signup" element={<SignUp />}></Route>
           <Route path="/test" element={<TestPage />}></Route>
-          <Route path="/product_search" element={<ProductSearch />}></Route>
+          <Route path="/search_product" element={<ProductSearch />}></Route>
+          <Route path="/add_product" element={<AddProduct />}></Route>
         </Routes>
       </div>
+      <NavButtons />
     </Router>
   );
 };

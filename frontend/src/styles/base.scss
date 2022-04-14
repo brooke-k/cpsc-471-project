@@ -46,3 +46,23 @@ body {
   margin: 0;
   bottom: 0;
 }
+
+table {
+  border-style: none;
+  border-width: 2px;
+  border-color: dimgray;
+  padding: 0ch;
+  border-radius: 4px;
+  margin: 0;
+}
+
+
+td,
+tr {
+  border-style: none;
+  border-width: 0;
+  margin: 5px;
+  border-width: 1px;
+  border-style: solid;
+  padding: 0.25ch 1ch
+}

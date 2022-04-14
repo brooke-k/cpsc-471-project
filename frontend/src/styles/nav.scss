@@ -1,0 +1,26 @@
+#navThing>a:any-link {
+  justify-self: flex-start;
+  width: fit-content;
+  align-self: flex-start;
+  font-weight: 600;
+  text-align: left;
+  border-radius: 1ch;
+  margin: 0 0.5rem;
+  padding: 0.5rem;
+  text-decoration: none;
+  color: #e6e6e6ef;
+  background: #979797ef;
+  font-size: 10pt;
+  transition: 100ms;
+}
+
+#navThing>a:any-link:hover {
+  padding: 0.5rem 1rem;
+  background: #383838;
+  color: #ffffffef;
+}
+
+#navThing {
+  z-index: 12;
+  background-color: #d3d3d3;
+}

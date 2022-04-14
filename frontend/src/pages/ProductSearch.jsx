@@ -499,7 +499,7 @@ const ProductSearch = () => {
             <table>
               <thead></thead>
               <tbody>
-                <tr style={{ fontWeight: "600" }}>
+                <tr style={{ fontWeight: "600", background: "gainsboro" }}>
                   <td>Name</td>
                   <td>Allergens</td>
                   <td>Ingredients</td>
