@@ -107,3 +107,31 @@ async def delete_user(code_word: str):
     config.db[manufactCollect].delete_many({})
     config.db[regularCollect].delete_many({})
     config.db[adminCollect].delete_many({})
+
+@apiRouter.get("/manufacturer/searchByName", response_model=user.Manufacturer)
+async def get_manufacturer(name: str):
+    if (userCheck := config.db[manufactCollect].find_one({"name": name})) is not None:
+      return parse_json(userCheck)
+    else:
+      raise HTTPException(status_code=400, detail="A manufacturer with that name could not be found")
+
+@apiRouter.get("/get/allRegular", response_description="Get all regular users")
+async def get_all_regular():
+  if(userCheck := config.db[regularCollect].find({},{'password':0})) is not None:
+    return parse_json(userCheck)
+  else:
+    raise HTTPException(status_code=400, detail="No regular users could be found.")
+
+@apiRouter.get("/get/allManufacturer", response_description="Get all manufacturers")
+async def get_all_regular():
+  if(userCheck := config.db[manufactCollect].find({},{'password':0})) is not None:
+    return parse_json(userCheck)
+  else:
+    raise HTTPException(status_code=400, detail="No manufacturers could be found.")
+
+@apiRouter.get("/get/allAdministrator", response_description="Get all administrators")
+async def get_all_regular():
+  if(userCheck := config.db[adminCollect].find({},{'password':0})) is not None:
+    return parse_json(userCheck)
+  else:
+    raise HTTPException(status_code=400, detail="No administrators could be found.")

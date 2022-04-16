@@ -28,6 +28,7 @@ const NavButtons = () => {
       <Link to="/login">Log In</Link> <Link to="/signup">Sign Up</Link>
       <Link to="/search_product">Search Products</Link>
       <Link to="/add_product">Add a Product</Link>
+      <Link to="/manufacturer_home">Search Manufacturer</Link>
     </div>
   );
 };

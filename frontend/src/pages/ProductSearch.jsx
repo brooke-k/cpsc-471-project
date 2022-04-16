@@ -37,18 +37,8 @@ const ProductSearch = () => {
   const [triticale, setTriticale] = useState(false);
   const [gluten, setGluten] = useState(false);
 
-  const [manufactName, setManufactName] = useState("");
-  const [ingredInclude, setIngredInclude] = useState([]);
   const [currIngred, setCurrIngredIn] = useState("");
-  const [currIngredOut, setCurrIngredOut] = useState("");
   const [currAllerg, setCurrAllergIn] = useState("");
-  const [currAllergOut, setCurrAllergOut] = useState("");
-  const [ingredExclude, setIngredExclude] = useState([]);
-  const [allergInclude, setAllergInclude] = useState([]);
-  const [allergExclude, setAllergExclude] = useState([]);
-  const [retailerName, setRetailerName] = useState([]);
-  const [ingredDisplay, setIngredDisplay] = useState([]);
-  const [allgerDisplay, setAllergDisplay] = useState([]);
   const [errNotif, setErrNotif] = useState("");
   const [hideResults, setHideResults] = useState(true);
   const [searchResult, setSearchResult] = useState([]);
@@ -220,10 +210,7 @@ const ProductSearch = () => {
         returnString += "&allergenList=" + topAllergens[i][0];
       }
     }
-    returnString +=
-      "&ingredientList=" + isInclude
-        ? encodeURIComponent("^.*$")
-        : encodeURIComponent("^[.]*$");
+    returnString += "&ingredientList=";
     return returnString;
   }
 
@@ -240,12 +227,8 @@ const ProductSearch = () => {
         found = true;
       }
     }
-    if (!found) {
-      returnString +=
-        "&allergenList=" + isInclude
-          ? encodeURIComponent("^.*$")
-          : encodeURIComponent("^[.]*$");
-    }
+    returnString += "&allergenList=";
+
     return returnString;
   }
 
@@ -358,23 +341,6 @@ const ProductSearch = () => {
           setSearchResult(tempArr);
           handleRes(JSON.stringify(res.data[i]));
         }
-
-        // stringifiedJSON.push([JSON.stringify(res.data[i])]);
-        // const parseableElement = JSON.parse(stringifiedJSON);
-        // // searchReturn.push(JSON.parse(res.data[i][0]));
-        // // JSON.setSearchResult(searchReturn);
-        // temp = searchReturn;
-        // searchReturn = temp.concat([
-        //   new productDispInfo(
-        //     parseableElement["name"],
-        //     parseableElement["manufacturer_name"],
-        //     parseableElement["idNumber"],
-        //     parseableElement["allergens"],
-        //     parseableElement["ingredients"]
-        //   ),
-        // ]);
-        // setSearchResult(searchReturn);
-        // console.log(stringifiedJSON.length);
       })
       .catch((err) => console.log(err));
     setHideResults(false);

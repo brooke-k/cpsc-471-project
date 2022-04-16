@@ -10,9 +10,20 @@ import UserProfile from "./UserProfile";
 import RetailerInfo from "../components/RetailerInfo";
 import UserTest from "../test_connections/UserTest";
 import SignUp from "./SignUp";
+import DisplayUser from "../components/DisplayUser";
+import DisplayAllUsersOneType from "../components/DisplayUser";
 
 const TestPage = () => {
-  return <div></div>;
+  return (
+    <div>
+      <DisplayAllUsersOneType
+        displayAll={false}
+        type={"manufacturer"}
+        username={"testUsername"}
+        email={"testEmail"}
+      ></DisplayAllUsersOneType>
+    </div>
+  );
 };
 
 export default TestPage;

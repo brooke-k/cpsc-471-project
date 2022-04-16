@@ -1,94 +1,148 @@
-import React from "react";
-import AlertTable from "../components/AlertTable";
-import ProductTable from "../components/ProductTable";
+import React, { useState } from "react";
+import axiosJSONInst from "../axios";
+import "../styles/prodSearch.scss";
 
-function ManufactHome() {
-  const addr = {
-    street: "9454 Strange Way",
-    city: "Wimblestone",
-    province: "Saskatchewan",
-    zipCode: "S0M 6A3",
+class manufacturerInfo {
+  constructor(
+    name,
+    email,
+    username,
+    phone_no,
+    street,
+    city,
+    province,
+    zip_code
+  ) {
+    this.name = name;
+    this.email = email;
+    this.username = username;
+    this.phone_no = phone_no;
+    this.street = street;
+    this.province = province;
+    this.zip_code = zip_code;
+    this.city = city;
+  }
+}
+
+const ManufactHome = () => {
+  const [usrNme, setUsrNme] = useState(""); // Username
+  const [nme, setNme] = useState(""); // Name (Actual first name, not username)
+  const [pwrd, setPwrd] = useState(""); // Password
+  const [errNotif, setErrNotif] = useState("");
+  const [strt, setStrt] = useState("");
+  const [cty, setCty] = useState("");
+  const [provTer, setProvTer] = useState("");
+  const [zipCode, setZipCode] = useState("");
+  const [phoneNo, setPhoneNo] = useState("");
+  const [searchEmail, setSearchEmail] = useState(false);
+  const [emailAddr, setEmailAddr] = useState(""); // User's password
+  const [foundResult, setFoundResult] = useState(false);
+  const [searchResult, setSearchResult] = useState(
+    new manufacturerInfo("", "", "", "", "", "", "", "")
+  );
+
+  const handleSearchEmail = (e) => {
+    setSearchEmail(e.target.value);
   };
 
-  const retailReg = ["Western Canada", "Central Canada"];
-
-  const manufactInfo = {
-    name: "Beans4U Food Co.",
-    username: "Beans4U",
-    email: "communications@beans4u.com",
-    address: addr,
-    phone: "+1-306-383-8211",
-    regions: retailReg,
+  const handleFoundResult = (e) => {
+    setFoundResult(e.target.value);
   };
+  const handleUsername = (e) => {
+    setUsrNme(e);
+  };
+  const handleName = (e) => {
+    setNme(e);
+  };
+  const handlePassword = (e) => {
+    setPwrd(e.target.value);
+  };
+  const handleEmail = (e) => {
+    setEmailAddr(e);
+  };
+  const handleStreet = (e) => {
+    setStrt(e.target.value);
+  };
+  const handleCity = (e) => {
+    setCty(e.target.value);
+  };
+  const handleProvince = (e) => {
+    setProvTer(e.target.value);
+  };
+  const handleZip = (e) => {
+    setZipCode(e.target.value);
+  };
+  const handlePhone = (e) => {
+    setPhoneNo(e);
+  };
+
+  const handleRes = (e) => {
+    console.log(e);
+    const oy = JSON.parse(e);
+    const newDispInf = new manufacturerInfo(
+      oy["name"],
+      oy["email"],
+      oy["username"],
+      oy["phone_no"],
+      oy["street"],
+      oy["city"],
+      oy["province"],
+      oy["zip_code"]
+    );
+    const comboList = searchResult.concat([newDispInf]);
+    setSearchResult(comboList);
+    if (searchResult.length > 0)
+      console.log("handled" + searchResult[searchResult.length - 1].name);
+  };
+
+  function searchManufacturer() {
+    axiosJSONInst
+      .get("/user/manufacturer/searchByName?name=" + nme)
+      .then((res) => {
+        if (res.status.valueOf !== 200) {
+          setErrNotif("A manufacturer with that name could not be found.");
+        } else {
+          handleName(res.data.name);
+          handleUsername(res.data.username);
+          handleEmail(res.data.email);
+          handlePhone(res.data.phone_no);
+        }
+        console.log(nme);
+      })
+      .catch((err) =>
+        setErrNotif("A manufacturer with that name could not be found.")
+      );
+  }
 
   return (
-    <div>
-      <h1>Manufacturer Home Page</h1>
-      <div>
-        <h3>{manufactInfo.name}</h3>
-        <p>
-          {manufactInfo.address.street}, {manufactInfo.address.city},
-          {manufactInfo.address.province} {manufactInfo.address.zipCode}
-        </p>
-        <p>@{manufactInfo.username}</p>
-        <p>{manufactInfo.email}</p>
-        <h2>Retail Regions:</h2>
-        <table>
-          <tr>
-            {retailReg.map((e, i) => {
-              return <td>{retailReg[i]} |</td>;
-            })}
-          </tr>
-        </table>
+    <>
+      <div id="pagePanel">
+        <div id="pageContent">
+          <h1 style={{ fontSize: "32pt" }}>Manufacturer Search</h1>
+          <div id="inputRow" style={{ justifyContent: "center" }}>
+            <p>Search by</p>
+            <select value={searchEmail} onChange={handleSearchEmail}>
+              <option value={false}>Name</option>
+              <option value={true}>Email</option>
+            </select>
+          </div>
+          <div id="inputRow" style={{ justifyContent: "center" }}>
+            <label htmlFor="nme">Name</label>
+            <input
+              type="text"
+              placeholder="Name"
+              value={nme}
+              onChange={handleName}
+              id="nme"
+            />
+          </div>
+          <div id="inputRow" style={{ justifyContent: "center" }}>
+            <button onClick={searchManufacturer}>Search</button>
+          </div>
+        </div>
       </div>
-      <div>
-        <h2>Add New Product</h2>
-        <div>
-          <label for="prodName">Product Name</label>
-          <input type="text" name="prodName"></input>
-        </div>
-        <div>
-          <label for="ingredients">Product Ingredients</label>
-          <input type="text" name="ingredients"></input>
-        </div>
-        <div>
-          <label for="prodVariants">Product Variants</label>
-          <input type="text" name="prodVariants"></input>
-        </div>
-        <div>
-          <label for="knownAllerg">Known Allergens</label>
-          <input type="text" name="knownAllerg"></input>
-        </div>
-        <div>
-          <label for="possibleAllerg">Possible Contaminants</label>
-          <input type="text" name="possibleAllerg"></input>
-        </div>
-        <div>
-          <label for="possibleAllerg">Possible Contaminants</label>
-          <input type="text" name="possibleAllerg"></input>
-        </div>
-        <div>
-          <label for="retailers">Retailers</label>
-          <input type="text" name="retailers"></input>
-        </div>
-        <button>Add Product</button>
-      </div>
-      <div>
-        <button>Remove a Product</button>
-      </div>
-      <div>
-        <h2>Current Products</h2>
-        <ProductTable />
-      </div>
-      <div>
-        <h2>Alerts</h2>
-        <AlertTable />
-      </div>
-      <div>
-        <a href=".">Log Out</a>
-      </div>
-    </div>
+    </>
   );
-}
+};
 
 export default ManufactHome;
