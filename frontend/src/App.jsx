@@ -1,5 +1,11 @@
-import React from "react";
-import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
+import React, { useEffect } from "react";
+import {
+  BrowserRouter as Router,
+  Routes,
+  Route,
+  Re,
+  useNavigate,
+} from "react-router-dom";
 import TestPage from "./pages/TestPage";
 import Login from "./pages/Login";
 import SignUp from "./pages/SignUp";
@@ -11,6 +17,7 @@ import AddProduct from "./pages/AddProduct";
 import ManufactHome from "./pages/ManufactHome";
 import AdminHome from "./pages/AdminHome";
 import RegularHome from "./pages/RegularHome";
+import { handleNav } from "./Auth";
 
 const App = () => {
   return (

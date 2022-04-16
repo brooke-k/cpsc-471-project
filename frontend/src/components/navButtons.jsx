@@ -1,8 +1,9 @@
 import React from "react";
-
+import { useEffect } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { banishCookie } from "../Cookies";
 import "../styles/nav.scss";
+import { handleNav } from "../Auth";
 
 const NavButtons = () => {
   const goNav = useNavigate();

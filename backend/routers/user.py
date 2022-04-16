@@ -62,7 +62,7 @@ async def create_user(user: user.Manufacturer):
 
 # Verifies a non-administrator (manufacturer or regular) user at login
 @apiRouter.get("/verify/non_admin", response_model=user.UserBase)
-async def get_user(email: str, password: str):
+async def get_user(email: str, password: str, username: str):
   if (userCheck := config.db[regularCollect].find_one({"email":email, "password":password, "username":username}, {'password':0})) is not None or (userCheck := config.db[manufactCollect].find_one({"email":email, "password":password},{'password':0})):
     return userCheck
   else:
@@ -70,11 +70,11 @@ async def get_user(email: str, password: str):
 
 # Verifies a non-administrator (manufacturer or regular) user at login
 @apiRouter.get("/verify/regular", response_model=user.UserBase)
-async def get_user(email: str, password: str):
+async def get_user(email: str, password: str, username: str):
   if (userCheck := config.db[regularCollect].find_one({"email":email, "password":password, "username":username}, {'password':0})) is not None:
     return userCheck
   else:
-    raise HTTPException(status_code=400, detail="A user with that email and password could not be found")
+    raise HTTPException(status_code=404, detail="A user with that email and password could not be found")
 
 # Verifies a non-administrator (manufacturer or regular) user at login
 @apiRouter.get("/verify/manufacturer", response_model=user.UserBase)
@@ -82,7 +82,7 @@ async def get_user(email: str, password: str):
   if (userCheck := config.db[manufactCollect].find_one({"email":email, "password":password},{'password':0})):
     return userCheck
   else:
-    raise HTTPException(status_code=400, detail="A user with that email and password could not be found")
+    raise HTTPException(status_code=404, detail="A user with that email and password could not be found")
 
 
 # Verifies an administrator (not manufacturer nor regular) user at login
@@ -91,7 +91,7 @@ async def get_user(username: str, email: str, password: str, admin_id: str):
   if (userCheck := config.db[adminCollect].find_one({"admin_id": admin_id, "email":email, "password":password, "username":username},{'password':0})):
     return userCheck
   else:
-    raise HTTPException(status_code=400, detail="An administrator with that email, password, and adminID could not be found")
+    raise HTTPException(status_code=404, detail="An administrator with that email, password, and adminID could not be found")
 
 
 # Removes the user (any kind) from the database. An Admin_id number must be provided if the account to be deleted is an admin account.

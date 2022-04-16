@@ -1,10 +1,8 @@
 import React, { useState } from "react";
 import axiosJSONInst from "../axios";
-import { Link, Navigate, useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import "../styles/auth.scss";
 import { bakeCookie } from "../Cookies";
-import { v4 as uuid } from "uuid";
-import { toHexStr } from "../Auth";
 
 const Login = () => {
   const goNav = useNavigate();
@@ -38,32 +36,41 @@ const Login = () => {
       setErrNotif("Please ensure all fields are filled in.");
       return;
     }
-    const verifString = usrnme + "&email=" + emailAddr + "&password=" + pwrd;
-
+    let loggedIn = false;
+    const verifString =
+      encodeURIComponent(usrnme) +
+      "&email=" +
+      encodeURIComponent(emailAddr) +
+      "&password=" +
+      encodeURIComponent(pwrd);
     axiosJSONInst
       .get("/user/verify/regular?username=" + verifString)
       .then((res) => {
         console.log(res);
-        bakeCookie("access_level", "admin");
+        bakeCookie("access_level", "regular");
         bakeCookie("username_email", usrnme + "_" + emailAddr);
         setErrNotif("Logged in");
-        goNav("/regular_home");
         setErrNotif("Login Success");
+        loggedIn = true;
+        goNav("/regular_home");
+        return;
       })
-      .catch(
-        axiosJSONInst
-          .get("/user/verify/manufacturer?username=" + verifString)
-          .then((res) => {
-            bakeCookie("access_level", "manufacturer");
-            bakeCookie("username_email", usrnme + "_" + emailAddr);
-            setErrNotif("Logged in");
-            goNav("/manufacturer_home");
-          })
-          .catch((err) => {
-            setErrNotif("Incorrect username or password.");
-            setPwrd("");
-          })
-      );
+      .catch((err) => console.log(err));
+
+    axiosJSONInst
+      .get("/user/verify/manufacturer?username=" + verifString)
+      .then((res) => {
+        bakeCookie("access_level", "manufacturer");
+        bakeCookie("username_email", usrnme + "_" + emailAddr);
+        setErrNotif("Logged in");
+        goNav("/manufacturer_home");
+        loggedIn = true;
+        return;
+      })
+      .catch((err) => {
+        setErrNotif("Incorrect username or password.");
+        setPwrd("");
+      });
   };
 
   const verifyAdmin = () => {
@@ -84,7 +91,7 @@ const Login = () => {
     axiosJSONInst
       .get(verifString)
       .then((res) => {
-        bakeCookie("access_level", toHexStr("loggedinadmin"));
+        bakeCookie("access_level", "loggedinadmin");
         bakeCookie(
           "username_email",
           encodeURIComponent(usrnme + "_" + emailAddr)

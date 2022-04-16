@@ -1,4 +1,6 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
+import { handleNav } from "../Auth";
 import axiosJSONInst from "../axios";
 import "../styles/prodSearch.scss";
 
@@ -25,6 +27,16 @@ class manufacturerInfo {
 }
 
 const ManufactHome = () => {
+  const navigation = useNavigate();
+  function verifyPageAccess() {
+    if (window.location.pathname !== handleNav(window.location.pathname)) {
+      navigation(handleNav(window.location.pathname));
+    }
+  }
+  useEffect(() => {
+    verifyPageAccess();
+  }, []);
+
   const [usrNme, setUsrNme] = useState(""); // Username
   const [nme, setNme] = useState(""); // Name (Actual first name, not username)
   const [pwrd, setPwrd] = useState(""); // Password

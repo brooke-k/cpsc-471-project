@@ -1,7 +1,8 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { Link } from "react-router-dom";
 import ReportForm from "../components/ReportForm.jsx";
 import RetailerInfo from "../components/RetailerInfo.jsx";
+
 import "../styles/home.scss";
 const Home = () => {
   return (
