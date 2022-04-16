@@ -1,11 +1,15 @@
 import React, { useState } from "react";
 import axiosJSONInst from "../axios";
-import { Link } from "react-router-dom";
+import { Link, Navigate, useNavigate } from "react-router-dom";
 import "../styles/auth.scss";
+import { bakeCookie } from "../Cookies";
+import { v4 as uuid } from "uuid";
+import { toHexStr } from "../Auth";
 
 const Login = () => {
+  const goNav = useNavigate();
   const userType = ["Non-Admin", "Administrator"];
-
+  const [usrnme, setUsrnme] = useState("");
   const [pwrd, setPwrd] = useState(""); // Password
   const [errNotif, setErrNotif] = useState("");
   const [emailAddr, setEmailAddr] = useState(""); // User's password
@@ -25,42 +29,69 @@ const Login = () => {
     setSelectedType(e.target.value);
     setErrNotif("");
   };
+  const handleUsername = (e) => {
+    setUsrnme(e.target.value);
+  };
 
   const verifyNonAdmin = () => {
-    if (pwrd === "" || emailAddr === "") {
+    if (pwrd === "" || emailAddr === "" || usrnme === "") {
       setErrNotif("Please ensure all fields are filled in.");
       return;
     }
-    const verifString =
-      "/user/verify/non_admin?email=" + emailAddr + "&password=" + pwrd;
+    const verifString = usrnme + "&email=" + emailAddr + "&password=" + pwrd;
+
     axiosJSONInst
-      .get(verifString)
+      .get("/user/verify/regular?username=" + verifString)
       .then((res) => {
         console.log(res);
+        bakeCookie("access_level", "admin");
+        bakeCookie("username_email", usrnme + "_" + emailAddr);
+        setErrNotif("Logged in");
+        goNav("/regular_home");
         setErrNotif("Login Success");
       })
-      .catch((err) => {
-        console.log(err);
-        setErrNotif("Username or password is incorrect.");
-      });
+      .catch(
+        axiosJSONInst
+          .get("/user/verify/manufacturer?username=" + verifString)
+          .then((res) => {
+            bakeCookie("access_level", "manufacturer");
+            bakeCookie("username_email", usrnme + "_" + emailAddr);
+            setErrNotif("Logged in");
+            goNav("/manufacturer_home");
+          })
+          .catch((err) => {
+            setErrNotif("Incorrect username or password.");
+            setPwrd("");
+          })
+      );
   };
 
   const verifyAdmin = () => {
-    if (pwrd === "" || admID === "" || emailAddr === "") {
+    if (pwrd === "" || admID === "" || emailAddr === "" || usrnme === "") {
       setErrNotif("Please ensure all fields are filled in.");
       return;
     }
 
     const verifString =
-      "/user/verify/admin?email=" +
-      emailAddr +
+      "/user/verify/admin?username=" +
+      encodeURIComponent(usrnme) +
+      "&email=" +
+      encodeURIComponent(emailAddr) +
       "&password=" +
-      pwrd +
+      encodeURIComponent(pwrd) +
       "&admin_id=" +
-      admID;
+      encodeURIComponent(admID);
     axiosJSONInst
       .get(verifString)
-      .then((res) => console.log(res))
+      .then((res) => {
+        bakeCookie("access_level", toHexStr("loggedinadmin"));
+        bakeCookie(
+          "username_email",
+          encodeURIComponent(usrnme + "_" + emailAddr)
+        );
+        setErrNotif("Logged In");
+        goNav("/admin_home");
+      })
       .catch((err) => {
         setErrNotif("Username, password, or adminsitrator ID is incorrect.");
         console.log(err);
@@ -71,6 +102,14 @@ const Login = () => {
     if (selectedType === userType[0]) {
       return (
         <>
+          <label htmlFor="username">Username</label>
+          <input
+            type="username"
+            placeholder="Username"
+            value={usrnme}
+            onChange={handleUsername}
+            id="username"
+          />
           <label htmlFor="email">Email Address</label>
           <input
             type="email"
@@ -95,6 +134,14 @@ const Login = () => {
     } else if (selectedType === userType[1]) {
       return (
         <>
+          <label htmlFor="username">Username</label>
+          <input
+            type="username"
+            placeholder="Username"
+            value={usrnme}
+            onChange={handleUsername}
+            id="username"
+          />
           <label htmlFor="email">Email Address</label>
           <input
             type="email"
@@ -110,7 +157,7 @@ const Login = () => {
             placeholder="Administrator ID"
             value={admID}
             onChange={handleAdmID}
-            id="email"
+            id="admID"
           />
           <label htmlFor="pwrd">Password</label>
           <input

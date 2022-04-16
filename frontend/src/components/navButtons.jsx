@@ -1,9 +1,16 @@
 import React from "react";
 
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
+import { banishCookie } from "../Cookies";
 import "../styles/nav.scss";
 
 const NavButtons = () => {
+  const goNav = useNavigate();
+  function logUserOut() {
+    banishCookie();
+    goNav("/");
+  }
+
   return (
     <div
       style={{
@@ -24,11 +31,7 @@ const NavButtons = () => {
       }}
       id="navThing"
     >
-      {" "}
-      <Link to="/login">Log In</Link> <Link to="/signup">Sign Up</Link>
-      <Link to="/search_product">Search Products</Link>
-      <Link to="/add_product">Add a Product</Link>
-      <Link to="/manufacturer_home">Search Manufacturer</Link>
+      <button onClick={logUserOut}>Log Out</button>
     </div>
   );
 };

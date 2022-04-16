@@ -14,16 +14,7 @@ import DisplayUser from "../components/DisplayUser";
 import DisplayAllUsersOneType from "../components/DisplayUser";
 
 const TestPage = () => {
-  return (
-    <div>
-      <DisplayAllUsersOneType
-        displayAll={false}
-        type={"manufacturer"}
-        username={"testUsername"}
-        email={"testEmail"}
-      ></DisplayAllUsersOneType>
-    </div>
-  );
+  return <></>;
 };
 
 export default TestPage;

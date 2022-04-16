@@ -1,4 +1,5 @@
 import React from "react";
+import axiosJSONInst from "../axios";
 
 const DisplayAllUsersOneType = (props) => {
   const userTypeExp = /^(admin|regular|manufacturer)$/;
@@ -47,12 +48,29 @@ const DisplayAllUsersOneType = (props) => {
   const username = getUsername();
   const email = getEmail();
 
+  function getAllUsersOfType() {
+    let requestString = "/user/get/all";
+    if (userType === "admin") {
+      requestString += "Administrator";
+    } else if (userType === "manufacturer") {
+      requestString += "Manufacturer";
+    } else requestString += "Regular";
+
+    axiosJSONInst
+      .get(requestString)
+      .then((res) => {
+        console.log(res);
+      })
+      .catch((err) => console.log(err));
+  }
+
   return (
     <>
       <h1>Type = {userType}</h1>
       <h2>DisplayAll = {displayAll ? "yes" : "no"}</h2>
       <h4>Username: {username}</h4>
       <h4>Email: {email}</h4>
+      <button onClick={getAllUsersOfType}>Get All</button>
     </>
   );
 };
