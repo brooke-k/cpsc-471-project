@@ -16,6 +16,7 @@ const AdminNavBar = () => {
     { path: "/search_product", title: "Search Products" },
     { path: "/search_manufacturer", title: "Search by Manufacturer" },
     { path: "/admin_profile", title: "Manage Profile" },
+    { path: "/manage_users", title: "ManageUsers" },
   ];
 
   return (

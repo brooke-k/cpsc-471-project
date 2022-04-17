@@ -4,6 +4,7 @@ import { useState, useEffect } from "react";
 import RegularNavBar from "../components/RegularNavBar";
 import ManufacturerNavBar from "../components/ManufacturerNavBar";
 import AdminNavBar from "../components/AdminNavBar";
+import DisplayUser from "../components/DisplayUser";
 
 const ManageUsers = () => {
   const [currNav, setCurrNav] = useState(<></>);
@@ -21,9 +22,9 @@ const ManageUsers = () => {
   }
   return (
     <>
-      {currNav}
+      <AdminNavBar />
       <div id="pageContent">
-        <h1>Manage users</h1>
+        <DisplayUser displayAll={true} type={"regular"} />
       </div>
     </>
   );

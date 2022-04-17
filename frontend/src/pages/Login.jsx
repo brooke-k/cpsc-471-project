@@ -91,7 +91,7 @@ const Login = () => {
     axiosJSONInst
       .get(verifString)
       .then((res) => {
-        bakeCookie("access_level", "loggedinadmin");
+        bakeCookie("access_level", "admin");
         bakeCookie(
           "username_email",
           encodeURIComponent(usrnme + "_" + emailAddr)
