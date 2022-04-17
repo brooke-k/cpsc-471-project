@@ -151,3 +151,26 @@ async def get_all_regular():
     return parse_json(userCheck)
   else:
     raise HTTPException(status_code=400, detail="No administrators could be found.")
+
+
+@apiRouter.put("/update/regularEmail", response_description="Update a regular user's email")
+async def update_regular(old_email: str, new_email: str, username: str):
+  if(userExists := config.db[regularCollect].find_one({"username": username, "email":old_email})) is not None and (userDoesntExist := config.db[regularCollect].find_one({"username":username, "email":new_email})) is None:
+    updateResult = config.db[regularCollect].update_one({"username":username, "email":old_email}, {"$set":{"email":new_email}})
+    if updateResult.modified_count == 1:
+      return JSONResponse(status_code=status.HTTP_200_OK)
+    else:
+      raise HTTPException(status_code=404, detail="Regular user was not able to be updated.")
+  else:
+    raise HTTPException(status_code=404, detail="Regular user matching provided credentials could not be found.")
+
+@apiRouter.put("/update/regularUsername", response_description="Update a regular user's username")
+async def update_regular(old_username: str, new_username: str, email: str):
+  if(userExists := config.db[regularCollect].find_one({"username": old_username, "email":email})) is not None and (userDoesntExist := config.db[regularCollect].find_one({"username":new_username, "email":email})) is None:
+    updateResult = config.db[regularCollect].update_one({"username":old_username, "email":email}, {"$set":{"username":new_username}})
+    if updateResult.modified_count == 1:
+      return JSONResponse(status_code=status.HTTP_200_OK)
+    else:
+      raise HTTPException(status_code=404, detail="Regular user was not able to be updated.")
+  else:
+    raise HTTPException(status_code=404, detail="Regular user matching provided credentials could not be found.")

@@ -8,6 +8,13 @@ const DisplayUser = (props) => {
   const [adminUsers, setAdminUsers] = useState([]);
   const [usersLoaded, setUsersLoaded] = useState(false);
 
+  useEffect(() => {
+    if (!usersLoaded) {
+      getAllUsersOfType();
+      setUsersLoaded(true);
+    }
+  }, []);
+
   const userTypeExp = /^(admin|regular|manufacturer)$/;
   function getType() {
     if (props.type.match(userTypeExp) === null) {
@@ -96,14 +103,18 @@ const DisplayUser = (props) => {
     setUsersLoaded(true);
   }
 
-  if (!usersLoaded) {
-    getAllUsersOfType();
-    setUsersLoaded(true);
-  }
-
   return (
     <>
       <h2>All Allergy Manager Users</h2>
+      <button
+        style={{ padding: "0.25rem" }}
+        onClick={() => {
+          getAllUsersOfType();
+          setUsersLoaded(true);
+        }}
+      >
+        Refresh User Information
+      </button>
       <h4>Regular Users</h4>
       <table>
         <thead></thead>
