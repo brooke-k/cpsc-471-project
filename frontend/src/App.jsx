@@ -20,6 +20,7 @@ import SearchManufacturer from "./pages/SearchManufacturer";
 import RegularProfile from "./pages/RegularProfile";
 import ManufacturerProfile from "./pages/ManufacturerProfile";
 import AdminProfile from "./pages/AdminProfile";
+import AccountDeleted from "./pages/AccountDeleted";
 
 const App = () => {
   return (
@@ -35,6 +36,7 @@ const App = () => {
           <Route path="/manufacturer_home" element={<ManufactHome />}></Route>
           <Route path="/admin_home" element={<AdminHome />}></Route>
           <Route path="/regular_home" element={<RegularHome />}></Route>
+          <Route path="/post_delete" element={<AccountDeleted />}></Route>
           <Route
             path="/search_manufacturer"
             element={<SearchManufacturer />}

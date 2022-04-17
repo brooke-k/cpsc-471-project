@@ -60,13 +60,12 @@ async def create_user(user: user.Manufacturer):
   else:
       raise HTTPException(status_code=400, detail="There already exists a manufacturer with that email or name. ")
 
-# Verifies a non-administrator (manufacturer or regular) user at login
-@apiRouter.get("/verify/non_admin", response_model=user.UserBase)
-async def get_user(email: str, password: str, username: str):
-  if (userCheck := config.db[regularCollect].find_one({"email":email, "password":password, "username":username}, {'password':0})) is not None or (userCheck := config.db[manufactCollect].find_one({"email":email, "password":password},{'password':0})):
+@apiRouter.get("/getInfo/regular")
+async def get_regular(email: str, username: str):
+  if(userCheck := config.db[regularCollect].find_one({"email":email, "username":username}, {'password':0, '_id':0})) is not None:
     return userCheck
   else:
-    raise HTTPException(status_code=400, detail="A user with that email and password could not be found")
+    raise HTTPException(status_code=404, detail="A user with that email and username could not be found")
 
 # Verifies a non-administrator (manufacturer or regular) user at login
 @apiRouter.get("/verify/regular", response_model=user.UserBase)
@@ -97,25 +96,24 @@ async def get_user(username: str, email: str, password: str, admin_id: str):
 # Removes the user (any kind) from the database. An Admin_id number must be provided if the account to be deleted is an admin account.
 # Otherwise, just the account's email and password is needed.
 @apiRouter.delete("/remove")
-async def delete_user(email: str, password: str, admin_id: Optional[str] = None):
-  if (userCheck := config.db[regularCollect].find_one({"email":email, "password":password})) is not None: #i.e. the user was found in regular
+async def delete_user(email: str, username: str, password: str, admin_id: Optional[str] = None):
+  if (userCheck := config.db[regularCollect].find_one({"email":email, "password":password, "username":username})) is not None: #i.e. the user was found in regular
       user_id = userCheck['_id']
-      deletedb_return =  config.db[regularCollect].delete_one({"email":email})
+      deletedb_return =  config.db[regularCollect].delete_one({"_id": user_id})
       if deletedb_return.deleted_count == 1:
          return JSONResponse(status_code=status.HTTP_204_NO_CONTENT)
-  if (userCheck := config.db[manufactCollect].find_one({"email":email, "password":password})) is not None: #i.e. the user was found in manufacturer
-       user_name = userCheck['name']
-       deletedb_return =  config.db[manufactCollect].delete_one({"email":email})
+  if (userCheck := config.db[manufactCollect].find_one({"email":email, "password":password, "username":username})) is not None: #i.e. the user was found in manufacturer
+       user_id = userCheck['_id']
+       deletedb_return = config.db[manufactCollect].delete_one({"_id":user_id})
        if deletedb_return.deleted_count == 1:
           config.db[productCollect].delete_many({"manufacturer_name": user_name})
           return JSONResponse(status_code=status.HTTP_204_NO_CONTENT)
   if admin_id is not None:
-    if (userCheck := config.db[adminCollect].find_one({"email":email, "password":password, "admin_id":admin_id})) is not None: #i.e. the user was found in administrator
+    if (userCheck := config.db[adminCollect].find_one({"email":email, "password":password, "username":username, "admin_id":admin_id})) is not None: #i.e. the user was found in administrator
         user_id = userCheck['_id']
         deletedb_return =  config.db[adminCollect].delete_one({"_id":user_id})
         if deletedb_return.deleted_count == 1:
            return JSONResponse(status_code=status.HTTP_204_NO_CONTENT)
-
   raise HTTPException(status_code=404, detail=f"User with email {email} could not be found to remove.")
 
 @apiRouter.delete("/testing/remove_all")
@@ -124,6 +122,7 @@ async def delete_user(code_word: str):
     config.db[manufactCollect].delete_many({})
     config.db[regularCollect].delete_many({})
     config.db[adminCollect].delete_many({})
+
 
 @apiRouter.get("/manufacturer/searchByName", response_model=user.Manufacturer)
 async def get_manufacturer(name: str):
