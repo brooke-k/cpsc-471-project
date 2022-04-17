@@ -105,83 +105,100 @@ const DisplayUser = (props) => {
 
   return (
     <>
-      <h2>All Allergy Manager Users</h2>
-      <button
-        style={{ padding: "0.25rem" }}
-        onClick={() => {
-          getAllUsersOfType();
-          setUsersLoaded(true);
+      <div
+        id="pagePanel"
+        style={{
+          margin: "1rem",
+          height: "auto",
+          flexGrow: "2",
+          flexShrink: "1",
         }}
       >
-        Refresh User Information
-      </button>
-      <h4>Regular Users</h4>
-      <table>
-        <thead></thead>
-        <tbody>
-          <tr>
-            <td>Username</td>
-            <td>Email</td>
-          </tr>
-          {regularUsers.map((e, i) => {
-            return (
-              <tr key={i}>
-                <td>{regularUsers[i].username}</td>
-                <td>{regularUsers[i].email}</td>
+        <div
+          id="pageContent"
+          style={{ flexFlow: "column nowrap", height: "inherit" }}
+        >
+          {/* <frameElement> */}
+          <h2>All Allergy Manager Users</h2>
+          <button
+            style={{ padding: "0.25rem" }}
+            onClick={() => {
+              getAllUsersOfType();
+              setUsersLoaded(true);
+            }}
+          >
+            Refresh User Information
+          </button>
+          <h4>Regular Users</h4>
+          <table>
+            <thead></thead>
+            <tbody>
+              <tr>
+                <td>Username</td>
+                <td>Email</td>
               </tr>
-            );
-          })}
-        </tbody>
-        <tfoot></tfoot>
-      </table>
-      <h4>Manufacturer Users</h4>
-      <table>
-        <thead></thead>
-        <tbody>
-          <tr>
-            <td>Username</td>
-            <td>Email</td>
-            <td>Name</td>
-            <td>Phone Number</td>
-            <td>Address</td>
-          </tr>
-          {manufacturerUsers.map((e, i) => {
-            return (
-              <tr key={i}>
-                <td>{manufacturerUsers[i].username}</td>
-                <td>{manufacturerUsers[i].email}</td>
-                <td>{manufacturerUsers[i].name}</td>
-                <td>{manufacturerUsers[i].phone_no}</td>
-                <td>
-                  {manufacturerUsers[i].street}, {manufacturerUsers[i].city},{" "}
-                  {manufacturerUsers[i].province}{" "}
-                  {manufacturerUsers[i].zip_code}
-                </td>
+              {regularUsers.map((e, i) => {
+                return (
+                  <tr key={i}>
+                    <td>{regularUsers[i].username}</td>
+                    <td>{regularUsers[i].email}</td>
+                  </tr>
+                );
+              })}
+            </tbody>
+            <tfoot></tfoot>
+          </table>
+          <h4>Manufacturer Users</h4>
+          <table>
+            <thead></thead>
+            <tbody>
+              <tr>
+                <td>Username</td>
+                <td>Email</td>
+                <td>Name</td>
+                <td>Phone Number</td>
+                <td>Address</td>
               </tr>
-            );
-          })}
-        </tbody>
-        <tfoot></tfoot>
-      </table>
-      <h4>Admin Users</h4>
-      <table>
-        <thead></thead>
-        <tbody>
-          <tr>
-            <td>Username</td>
-            <td>Email</td>
-          </tr>
-          {adminUsers.map((e, i) => {
-            return (
-              <tr key={i}>
-                <td>{adminUsers[i].username}</td>
-                <td>{adminUsers[i].email}</td>
+              {manufacturerUsers.map((e, i) => {
+                return (
+                  <tr key={i}>
+                    <td>{manufacturerUsers[i].username}</td>
+                    <td>{manufacturerUsers[i].email}</td>
+                    <td>{manufacturerUsers[i].name}</td>
+                    <td>{manufacturerUsers[i].phone_no}</td>
+                    <td>
+                      {manufacturerUsers[i].street}, {manufacturerUsers[i].city}
+                      , {manufacturerUsers[i].province}{" "}
+                      {manufacturerUsers[i].zip_code}
+                    </td>
+                  </tr>
+                );
+              })}
+            </tbody>
+            <tfoot></tfoot>
+          </table>
+          <h4>Admin Users</h4>
+          <table>
+            <thead></thead>
+            <tbody>
+              <tr>
+                <td>Username</td>
+                <td>Email</td>
               </tr>
-            );
-          })}
-        </tbody>
-        <tfoot></tfoot>
-      </table>
+              {adminUsers.map((e, i) => {
+                return (
+                  <tr key={i}>
+                    <td>{adminUsers[i].username}</td>
+                    <td>{adminUsers[i].email}</td>
+                  </tr>
+                );
+              })}
+            </tbody>
+            <tfoot></tfoot>
+          </table>
+          {/* </frameElement> */}
+        </div>
+      </div>
     </>
   );
 };
