@@ -69,6 +69,16 @@ async def update_product(product_id: str, name: Optional[str] = None, manufactNa
   else:
     raise HTTPException(status_code=400, detail="Product could not be updated.")
 
+@apiRouter.delete("/remove", response_description="Remove a product from the database")
+async def remove_product(product_id: str):
+  if(productCheck := config.db[productCollect].find_one({"id_number": product_id})) is not None:
+    deleted_result = config.db[productCollect].delete_one({"id_number":product_id})
+    if deleted_result.deleted_count == 1:
+      return JSONResponse(status_code=status.HTTP_204_NO_CONTENT)
+    else:
+      raise HTTPException(status_code=400, detail="Product could not be deleted.")
+
+
 
 
 # @apiRouter.post("/create/ingredient", response_description="Add a new ingredient to the database")
