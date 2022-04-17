@@ -1,6 +1,10 @@
 import React, { useEffect, useMemo, useState, useCallback } from "react";
 import axiosJSONInst from "../axios";
 import "../styles/pages.scss";
+import { getCookie } from "../Cookies";
+import RegularNavBar from "../components/RegularNavBar";
+import ManufacturerNavBar from "../components/ManufacturerNavBar";
+import AdminNavBar from "../components/AdminNavBar";
 
 class Ingredient {
   isAllergen;
@@ -8,6 +12,19 @@ class Ingredient {
 }
 
 const AddProduct = () => {
+  const [currNav, setCurrNav] = useState(<></>);
+  useEffect(() => {
+    checkNavbar();
+  }, []);
+  function checkNavbar() {
+    return getCookie("access_level") === "regular"
+      ? setCurrNav(<RegularNavBar />)
+      : getCookie("access_level") === "manufacturer"
+      ? setCurrNav(<ManufacturerNavBar />)
+      : getCookie("access_level") === "admin"
+      ? setCurrNav(<AdminNavBar />)
+      : setCurrNav(<></>);
+  }
   const [manuName, setManuName] = useState("");
   const [prodVar, setProdVar] = useState("");
   const [prodName, setProdName] = useState("");
@@ -130,106 +147,109 @@ const AddProduct = () => {
   };
 
   return (
-    <div id="pagePanel">
-      <h1>Add Product</h1>
-      <div id="pageContent">
-        <div id="inputRow" style={{ justifyContent: "start" }}>
-          <input
-            id="prodName"
-            value={prodName}
-            type="text"
-            placeholder="Name"
-            onInput={handleProdName}
-          ></input>
-          <label htmlFor="prodName">Product Name</label>
+    <>
+      {currNav}
+      <div id="pagePanel">
+        <h1>Add Product</h1>
+        <div id="pageContent">
+          <div id="inputRow" style={{ justifyContent: "start" }}>
+            <input
+              id="prodName"
+              value={prodName}
+              type="text"
+              placeholder="Name"
+              onInput={handleProdName}
+            ></input>
+            <label htmlFor="prodName">Product Name</label>
+          </div>
+          <div id="inputRow" style={{ justifyContent: "start" }}>
+            <input
+              id="manuName"
+              value={manuName}
+              type="text"
+              placeholder="manuName"
+              onInput={handleManuName}
+            ></input>
+            <label htmlFor="prodName">Manufacturer Name</label>
+          </div>
+          <div id="inputRow" style={{ justifyContent: "start" }}>
+            <input
+              type="text"
+              value={prodVar}
+              placeholder="Variant Name"
+              onInput={handleProdVar}
+            ></input>
+            <label htmlFor="prodVar">Product Variant (Optional)</label>
+          </div>
+          <div id="inputRow">
+            <input
+              type="text"
+              value={currIngred}
+              id="ingredientInput"
+              onInput={handleCurrIngred}
+              placeholder="Add New Ingredient"
+            ></input>
+            <label htmlFor="allergenCheck">Ingredient is an allergen</label>
+            <input
+              type="checkbox"
+              value={isAllergen}
+              id="allergenCheck"
+              onChange={handleIsAllergen}
+              style={{ width: "min-content" }}
+            ></input>
+          </div>
+          <div id="inputRow">
+            <button onClick={handleIngredient} className="plus">
+              +
+            </button>
+            <button onClick={handleReset}>Reset Ingredients</button>
+          </div>
+          <p>{infoNotif}</p>
         </div>
-        <div id="inputRow" style={{ justifyContent: "start" }}>
-          <input
-            id="manuName"
-            value={manuName}
-            type="text"
-            placeholder="manuName"
-            onInput={handleManuName}
-          ></input>
-          <label htmlFor="prodName">Manufacturer Name</label>
-        </div>
-        <div id="inputRow" style={{ justifyContent: "start" }}>
-          <input
-            type="text"
-            value={prodVar}
-            placeholder="Variant Name"
-            onInput={handleProdVar}
-          ></input>
-          <label htmlFor="prodVar">Product Variant (Optional)</label>
-        </div>
-        <div id="inputRow">
-          <input
-            type="text"
-            value={currIngred}
-            id="ingredientInput"
-            onInput={handleCurrIngred}
-            placeholder="Add New Ingredient"
-          ></input>
-          <label htmlFor="allergenCheck">Ingredient is an allergen</label>
-          <input
-            type="checkbox"
-            value={isAllergen}
-            id="allergenCheck"
-            onChange={handleIsAllergen}
-            style={{ width: "min-content" }}
-          ></input>
-        </div>
-        <div id="inputRow">
-          <button onClick={handleIngredient} className="plus">
-            +
+        <div id="pageContent">
+          <p
+            style={{
+              fontSize: "14pt",
+              fontWeight: "500",
+              textAlign: "left",
+              alignSelf: "stretch",
+              paddingInline: "1rem",
+            }}
+          >
+            Current Ingredients:
+          </p>
+          <ul>
+            {ingredients.map((e, i) => {
+              return <li key={i}>{ingredients[i]}</li>;
+            })}
+          </ul>
+          <p
+            style={{
+              fontSize: "14pt",
+              fontWeight: "500",
+              textAlign: "left",
+              alignSelf: "stretch",
+              paddingInline: "1rem",
+            }}
+          >
+            Current Allergens:
+          </p>
+          <ul>
+            {allergens.map((e, i) => {
+              return <li key={i}>{allergens[i]}</li>;
+            })}
+          </ul>
+          <button
+            style={{
+              alignSelf: "center",
+            }}
+            onClick={handleAddProduct}
+          >
+            Add Product To Database
           </button>
-          <button onClick={handleReset}>Reset Ingredients</button>
         </div>
-        <p>{infoNotif}</p>
       </div>
-      <div id="pageContent">
-        <p
-          style={{
-            fontSize: "14pt",
-            fontWeight: "500",
-            textAlign: "left",
-            alignSelf: "stretch",
-            paddingInline: "1rem",
-          }}
-        >
-          Current Ingredients:
-        </p>
-        <ul>
-          {ingredients.map((e, i) => {
-            return <li key={i}>{ingredients[i]}</li>;
-          })}
-        </ul>
-        <p
-          style={{
-            fontSize: "14pt",
-            fontWeight: "500",
-            textAlign: "left",
-            alignSelf: "stretch",
-            paddingInline: "1rem",
-          }}
-        >
-          Current Allergens:
-        </p>
-        <ul>
-          {allergens.map((e, i) => {
-            return <li key={i}>{allergens[i]}</li>;
-          })}
-        </ul>
-        <button
-          style={{
-            alignSelf: "center",
-          }}
-          onClick={handleAddProduct}
-        >
-          Add Product To Database
-        </button>
-      </div>
-    </div>
+    </>
   );
 };
 

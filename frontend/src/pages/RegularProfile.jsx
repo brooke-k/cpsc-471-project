@@ -1,11 +1,11 @@
 import React from "react";
-import { getCookie } from "../Cookies";
 import { useState, useEffect } from "react";
+import { getCookie } from "../Cookies";
 import RegularNavBar from "../components/RegularNavBar";
 import ManufacturerNavBar from "../components/ManufacturerNavBar";
 import AdminNavBar from "../components/AdminNavBar";
 
-const ManageUsers = () => {
+const RegularProfile = () => {
   const [currNav, setCurrNav] = useState(<></>);
   useEffect(() => {
     checkNavbar();
@@ -23,10 +23,10 @@ const ManageUsers = () => {
     <>
       {currNav}
       <div id="pageContent">
-        <h1>Manage users</h1>
+        <h1>Regular Profile</h1>
       </div>
     </>
   );
 };
 
-export default ManageUsers;
+export default RegularProfile;

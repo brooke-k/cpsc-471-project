@@ -1,6 +1,8 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { handleNav } from "../Auth";
+import RegularNavBar from "../components/RegularNavBar";
+import { getCookie } from "../Cookies";
 
 const RegularHome = () => {
   const navigation = useNavigate();
@@ -13,9 +15,12 @@ const RegularHome = () => {
     verifyPageAccess();
   }, []);
   return (
-    <div>
-      <h1>Regular Home</h1>
-    </div>
+    <>
+      <RegularNavBar />
+      <div>
+        <h1>Regular Home</h1>
+      </div>
+    </>
   );
 };
 

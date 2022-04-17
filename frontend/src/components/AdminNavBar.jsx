@@ -4,21 +4,18 @@ import { banishCookie } from "../Cookies";
 import { Link } from "react-router-dom";
 import "../styles/nav.scss";
 
-const RegularNavBar = () => {
+const AdminNavBar = () => {
   const goNav = useNavigate();
   function logUserOut() {
     banishCookie();
     goNav("/");
   }
-  // "/regular_home",
-  // "/search_product",
-  // "/regular_profile",
-  // "/search_manufacturer",
+
   const navLinks = [
-    { path: "/regular_home", title: "Home" },
+    { path: "/admin_home", title: "Home" },
     { path: "/search_product", title: "Search Products" },
     { path: "/search_manufacturer", title: "Search by Manufacturer" },
-    { path: "/regular_profile", title: "Manage Profile" },
+    { path: "/admin_profile", title: "Manage Profile" },
   ];
 
   return (
@@ -37,4 +34,4 @@ const RegularNavBar = () => {
   );
 };
 
-export default RegularNavBar;
+export default AdminNavBar;

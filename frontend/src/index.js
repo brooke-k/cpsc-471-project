@@ -1,17 +1,8 @@
 import React from 'react';
-import { BrowserRouter, Routes, Route, Link } from 'react-router-dom';
-import Signup from './pages/SignUp';
-import RegUserHome from './pages/RegUserHome';
-import Login from './pages/Login.jsx';
-import AdminHome from './pages/AdminHome.jsx';
-import Home from './pages/Home.jsx';
 
 import ReactDOM from 'react-dom';
 import './styles/base.scss';
-import ProductSearch from './pages/ProductSearch';
-import TestPage from './pages/TestPage';
-import ManufactHome from './pages/ManufactHome';
-import UserProfile from './pages/UserProfile';
+
 import App from './App'
 
 import _ from 'lodash';

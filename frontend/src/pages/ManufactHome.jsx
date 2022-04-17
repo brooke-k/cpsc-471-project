@@ -3,6 +3,8 @@ import { useNavigate } from "react-router-dom";
 import { handleNav } from "../Auth";
 import axiosJSONInst from "../axios";
 import "../styles/prodSearch.scss";
+import { getCookie } from "../Cookies";
+import ManufacturerNavBar from "../components/ManufacturerNavBar";
 
 class manufacturerInfo {
   constructor(
@@ -128,6 +130,7 @@ const ManufactHome = () => {
 
   return (
     <>
+      <ManufacturerNavBar />
       <div id="pagePanel">
         <div id="pageContent">
           <h1 style={{ fontSize: "32pt" }}>Manufacturer Search</h1>

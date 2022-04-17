@@ -1,6 +1,10 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import "../styles/prodSearch.scss";
 import axiosJSONInst from "../axios";
+import { getCookie } from "../Cookies";
+import RegularNavBar from "../components/RegularNavBar";
+import ManufacturerNavBar from "../components/ManufacturerNavBar";
+import AdminNavBar from "../components/AdminNavBar";
 
 class regexAndStr {
   constructor(reg, str) {
@@ -20,6 +24,21 @@ class productDispInfo {
 }
 
 const ProductSearch = () => {
+  const [currNav, setCurrNav] = useState(<></>);
+
+  useEffect(() => {
+    checkNavbar();
+  }, []);
+
+  function checkNavbar() {
+    return getCookie("access_level") === "regular"
+      ? setCurrNav(<RegularNavBar />)
+      : getCookie("access_level") === "manufacturer"
+      ? setCurrNav(<ManufacturerNavBar />)
+      : getCookie("access_level") === "admin"
+      ? setCurrNav(<AdminNavBar />)
+      : setCurrNav(<></>);
+  }
   const notAllowedChars = /[^A-Z0-9- ]/;
 
   const [egg, setEgg] = useState(false);
@@ -348,6 +367,7 @@ const ProductSearch = () => {
 
   return (
     <>
+      {currNav}
       <div id="pagePanel" styles={{ margin: "0rem" }}>
         <div id="pageContent" style={{ rowGap: "0" }}>
           <h1 style={{ fontSize: "32pt" }}>Product Search</h1>{" "}
