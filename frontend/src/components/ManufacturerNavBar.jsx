@@ -19,6 +19,7 @@ const ManufacturerNavBar = () => {
     { path: "/search_product", title: "Search Products" },
     { path: "/search_manufacturer", title: "Search by Manufacturer" },
     { path: "/manufacturer_profile", title: "Manage Profile" },
+    { path: "/add_product", title: "AddProduct" },
   ];
 
   return (

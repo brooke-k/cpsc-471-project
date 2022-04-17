@@ -50,20 +50,16 @@ async def update_product(product_id: str, name: Optional[str] = None, manufactNa
   if(productCheck := config.db[productCollect].find_one({"id_number": product_id})) is not None:
     if name is not None:
       update_result = config.db[productCollect].update_one({"id_number": product_id}, {"$set":{"name": name}})
-      if update_result != 1:
-        raise HTTPException(status_code=400, detail="Product name could not be updated.")
+
     if  manufactName is not None:
       update_result = config.db[productCollect].update_one({"id_number": product_id}, {"$set":{"manufacturer_name": manufactName}})
-      if update_result != 1:
-        raise HTTPException(status_code=400, detail="Product manufacturer name could not be updated.")
+
     if ingredients != []:
       update_result = config.db[productCollect].update_one({"id_number": product_id}, {"$set":{"ingredients": ingredients}})
-      if update_result != 1:
-        raise HTTPException(status_code=400, detail="Product ingredients could not be updated.")
+
     if allergens != []:
       update_result = config.db[productCollect].update_one({"id_number": product_id}, {"$set":{"allergens": allergens}})
-      if update_result != 1:
-        raise HTTPException(status_code=400, detail="Product allergens could not be updated.")
+
     productCheck = config.db[productCollect].find_one({"id_number": product_id})
     return JSONResponse(status_code=status.HTTP_200_OK, content = parse_json(productCheck))
   else:

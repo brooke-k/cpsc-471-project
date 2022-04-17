@@ -24,6 +24,7 @@ const adminUserPaths = [
   "/manage_users",
   "/viewall_users",
   "/viewall_products",
+  "/manage_products",
 ];
 
 function isLoggedIn() {

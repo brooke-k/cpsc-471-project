@@ -132,8 +132,7 @@ const RegularProfile = () => {
                 "&email=" +
                 encodeURIComponent(confirmEmail) +
                 "&password=" +
-                encodeURIComponent(confirmPasswrd) +
-                "&admin_id="
+                encodeURIComponent(confirmPasswrd)
             )
             .then((res) => {
               setDeleteNotif("Account successfully deleted.");

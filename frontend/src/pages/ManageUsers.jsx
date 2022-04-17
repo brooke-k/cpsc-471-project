@@ -107,6 +107,7 @@ const ManageUsers = () => {
                   value={currentUsername}
                   placeholder="Username"
                   name="currentUsername"
+                  onChange={(e) => setCurrentUsername(e.target.value)}
                 ></input>
               </div>
             </div>
@@ -135,6 +136,7 @@ const ManageUsers = () => {
                   value={currentEmail}
                   placeholder="Email"
                   name="currentEmail"
+                  onChange={(e) => setcurrentEmail(e.target.value)}
                 ></input>
               </div>
             </div>
@@ -158,9 +160,10 @@ const ManageUsers = () => {
                     justifySelf: "center",
                   }}
                   type="text"
-                  value={currentUsername}
+                  value={newUsername}
                   placeholder="Username"
                   name="currentUsername"
+                  onChange={(e) => setNewUsername(e.target.value)}
                 ></input>
               </div>
             </div>

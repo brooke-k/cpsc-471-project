@@ -1,0 +1,19 @@
+@import "./base.scss";
+
+#AppBase>#pageContent h2 {
+  font-size: 16pt;
+  text-align: center;
+  justify-self: center;
+  justify-items: center;
+  text-transform: uppercase;
+  letter-spacing: 1ex;
+  font-weight: 300;
+  opacity: 40%;
+}
+
+#AppBase>#pageContent h1 {
+  font-size: 38pt;
+  font-weight: 400;
+  text-transform: none;
+  letter-spacing: normal;
+}

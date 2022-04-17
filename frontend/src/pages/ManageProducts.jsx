@@ -4,13 +4,52 @@ import axiosJSONInst from "../axios";
 import AdminNavBar from "../components/AdminNavBar";
 import DisplayAllProducts from "../components/DisplayAllProducts";
 import "../styles/prodSearch.scss";
+import { getCookie } from "../Cookies";
+import RegularNavBar from "../components/RegularNavBar";
+import ManufacturerNavBar from "../components/ManufacturerNavBar";
 
 const ManageProducts = () => {
+  const [currNav, setCurrNav] = useState(<></>);
+  const [newName, setNewName] = useState("");
+  const [newManufact, setNewManufact] = useState("");
+  const [ingredients, setNewIngredients] = useState("");
+  const [allergens, setNewAllergens] = useState("");
+  useEffect(() => {
+    checkNavbar();
+  }, []);
+  function checkNavbar() {
+    return getCookie("access_level") === "regular"
+      ? setCurrNav(<RegularNavBar />)
+      : getCookie("access_level") === "manufacturer"
+      ? setCurrNav(<ManufacturerNavBar />)
+      : getCookie("access_level") === "admin"
+      ? setCurrNav(<AdminNavBar />)
+      : setCurrNav(<></>);
+  }
+
   const [actionNotif, setactionNotif] = useState("");
   const [productId, setProductID] = useState("");
 
   const handleProductID = (e) => {
     setProductID(e.target.value);
+    setactionNotif("");
+  };
+
+  const handleNewName = (e) => {
+    setNewName(e.target.value);
+    setactionNotif("");
+  };
+
+  const handleNewManufact = (e) => {
+    setNewManufact(e.target.value);
+    setactionNotif("");
+  };
+  const handleIngredients = (e) => {
+    setNewIngredients(e.target.value);
+    setactionNotif("");
+  };
+  const handleAllergens = (e) => {
+    setNewAllergens(e.target.value);
     setactionNotif("");
   };
 
@@ -31,6 +70,48 @@ const ManageProducts = () => {
         setactionNotif(
           'Error: Product with ID "' + productId + '" could not be deleted.'
         );
+      });
+  }
+
+  function updateProduct() {
+    if (productId === "") {
+      setactionNotif("Please enter a product ID");
+      return;
+    }
+    let updateString = "/product/update?product_id=" + productId;
+
+    if (newName !== "") {
+      updateString += "&name=";
+      updateString += encodeURIComponent(newName);
+    }
+    if (newManufact !== "") {
+      updateString += "&manufactName=";
+      updateString += encodeURIComponent(newManufact);
+    }
+    if (ingredients !== "") {
+      const allingreds = ingredients.split(";");
+      for (let i = 0; i < allingreds.length; i++) {
+        updateString += "&ingredients=";
+        updateString += allingreds[i];
+      }
+    }
+    if (allergens !== "") {
+      const allAllerg = allergens.split(";");
+      for (let i = 0; i < allAllerg.length; i++) {
+        updateString += "&allergens=";
+        updateString += allAllerg[i];
+      }
+    }
+
+    axiosJSONInst
+      .put(updateString)
+      .then((res) => {
+        console.log(res);
+        setactionNotif("Successfully updated product.");
+      })
+      .catch((err) => {
+        console.log(err);
+        setactionNotif("Product was not successfully updated.");
       });
   }
 
@@ -92,6 +173,54 @@ const ManageProducts = () => {
                 ></input>
               </div>
             </div>
+            <div style={{ margin: "1rem", padding: "0" }}>
+              <div id="inputRow">
+                <label htmlFor="newName">New Product Name</label>
+                <input
+                  type="text"
+                  placeholder="New Name"
+                  name="newName"
+                  value={newName}
+                  onInput={handleNewName}
+                ></input>
+              </div>
+            </div>
+            <div style={{ margin: "1rem", padding: "0" }}>
+              <div id="inputRow">
+                <label htmlFor="newName">New Manufacturer Name</label>
+                <input
+                  type="text"
+                  placeholder="New Name"
+                  name="newManufact"
+                  value={newManufact}
+                  onInput={handleNewManufact}
+                ></input>
+              </div>
+            </div>
+            <div style={{ margin: "1rem", padding: "0" }}>
+              <div id="inputRow">
+                <label htmlFor="ingredients">New Product Ingredients</label>
+                <input
+                  type="text"
+                  placeholder="Ingredients, separated with a semicolon (;)"
+                  name="ingredients"
+                  value={ingredients}
+                  onInput={handleIngredients}
+                ></input>
+              </div>
+            </div>
+            <div style={{ margin: "1rem", padding: "0" }}>
+              <div id="inputRow">
+                <label htmlFor="allergens">New Product Allergens</label>
+                <input
+                  type="text"
+                  placeholder="Allergens, separated with a semicolon (;)"
+                  name="allergens"
+                  value={allergens}
+                  onInput={handleAllergens}
+                ></input>
+              </div>
+            </div>
             <div
               style={{ margin: "1rem", padding: "0" }}
               // hidden={updateOption === "updateEmail"}
@@ -117,6 +246,7 @@ const ManageProducts = () => {
                 }}
               >
                 <button onClick={deleteProduct}>Delete Product By ID</button>
+                <button onClick={updateProduct}>Update Product By ID</button>
               </div>
               <div id="inputRow">
                 <h3>{actionNotif}</h3>
