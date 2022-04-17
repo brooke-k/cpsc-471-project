@@ -45,6 +45,31 @@ async def create_product(prod: product.ProductBase):
   else:
     raise HTTPException(status_code=404, detail="Product manufacturer could not be found in the database.")
 
+@apiRouter.put("/update", response_description="Update product information")
+async def update_product(product_id: str, name: Optional[str] = None, manufactName: Optional[str] = None, ingredients: Optional[List[str]] = Query([]), allergens: Optional[List[str]] = Query([])):
+  if(productCheck := config.db[productCollect].find_one({"id_number": product_id})) is not None:
+    if name is not None:
+      update_result = config.db[productCollect].update_one({"id_number": product_id}, {"$set":{"name": name}})
+      if update_result != 1:
+        raise HTTPException(status_code=400, detail="Product name could not be updated.")
+    if  manufactName is not None:
+      update_result = config.db[productCollect].update_one({"id_number": product_id}, {"$set":{"manufacturer_name": manufactName}})
+      if update_result != 1:
+        raise HTTPException(status_code=400, detail="Product manufacturer name could not be updated.")
+    if ingredients != []:
+      update_result = config.db[productCollect].update_one({"id_number": product_id}, {"$set":{"ingredients": ingredients}})
+      if update_result != 1:
+        raise HTTPException(status_code=400, detail="Product ingredients could not be updated.")
+    if allergens != []:
+      update_result = config.db[productCollect].update_one({"id_number": product_id}, {"$set":{"allergens": allergens}})
+      if update_result != 1:
+        raise HTTPException(status_code=400, detail="Product allergens could not be updated.")
+    productCheck = config.db[productCollect].find_one({"id_number": product_id})
+    return JSONResponse(status_code=status.HTTP_200_OK, content = parse_json(productCheck))
+  else:
+    raise HTTPException(status_code=400, detail="Product could not be updated.")
+
+
 
 # @apiRouter.post("/create/ingredient", response_description="Add a new ingredient to the database")
 # async def create_ingredient(ingred: product.Ingredient):
@@ -67,10 +92,10 @@ async def create_product(prod: product.ProductBase):
 
 
 #search by name
-@apiRouter.get("/search/productName", response_model=List[product.Product])
-async def get_productByName(name:str):
+@apiRouter.get("/search/productName")
+async def get_productByName(name:Optional[Pattern] = r"^.*$"):
   if(productInfo := list(config.db[productCollect].find({"name":name}))) is not None:
-    return productInfo
+    return parse_json(productInfo)
   else:
     raise HTTPException(status_code=400, detail="A product with that name could not be found")
 

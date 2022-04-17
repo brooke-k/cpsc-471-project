@@ -67,6 +67,21 @@ async def get_regular(email: str, username: str):
   else:
     raise HTTPException(status_code=404, detail="A user with that email and username could not be found")
 
+@apiRouter.get("/getInfo/manufacturer")
+async def get_regular(email: str, username: str):
+  if(userCheck := config.db[manufactCollect].find_one({"email":email, "username":username}, {'password':0, '_id':0})) is not None:
+    return userCheck
+  else:
+    raise HTTPException(status_code=404, detail="A user with that email and username could not be found")
+
+@apiRouter.get("/getInfo/administrator")
+async def get_regular(email: str, username: str):
+  if(userCheck := config.db[adminCollect].find_one({"email":email, "username":username}, {'password':0, '_id':0})) is not None:
+    return userCheck
+  else:
+    raise HTTPException(status_code=404, detail="A user with that email and username could not be found")
+
+
 # Verifies a non-administrator (manufacturer or regular) user at login
 @apiRouter.get("/verify/regular", response_model=user.UserBase)
 async def get_user(email: str, password: str, username: str):
@@ -97,31 +112,31 @@ async def get_user(username: str, email: str, password: str, admin_id: str):
 # Otherwise, just the account's email and password is needed.
 @apiRouter.delete("/remove")
 async def delete_user(email: str, username: str, password: str, admin_id: Optional[str] = None):
-  if (userCheck := config.db[regularCollect].find_one({"email":email, "password":password, "username":username})) is not None: #i.e. the user was found in regular
-      user_id = userCheck['_id']
-      deletedb_return =  config.db[regularCollect].delete_one({"_id": user_id})
-      if deletedb_return.deleted_count == 1:
-         return JSONResponse(status_code=status.HTTP_204_NO_CONTENT)
-  if (userCheck := config.db[manufactCollect].find_one({"email":email, "password":password, "username":username})) is not None: #i.e. the user was found in manufacturer
-       user_id = userCheck['_id']
-       deletedb_return = config.db[manufactCollect].delete_one({"_id":user_id})
-       if deletedb_return.deleted_count == 1:
-          config.db[productCollect].delete_many({"manufacturer_name": user_name})
-          return JSONResponse(status_code=status.HTTP_204_NO_CONTENT)
   if admin_id is not None:
     if (userCheck := config.db[adminCollect].find_one({"email":email, "password":password, "username":username, "admin_id":admin_id})) is not None: #i.e. the user was found in administrator
         user_id = userCheck['_id']
         deletedb_return =  config.db[adminCollect].delete_one({"_id":user_id})
         if deletedb_return.deleted_count == 1:
            return JSONResponse(status_code=status.HTTP_204_NO_CONTENT)
-  raise HTTPException(status_code=404, detail=f"User with email {email} could not be found to remove.")
+  elif (userCheck := config.db[regularCollect].find_one({"email":email, "password":password, "username":username})) is not None: #i.e. the user was found in regular
+      user_id = userCheck['_id']
+      deletedb_return =  config.db[regularCollect].delete_one({"_id": user_id})
+      if deletedb_return.deleted_count == 1:
+         return JSONResponse(status_code=status.HTTP_204_NO_CONTENT)
+  elif (userCheck := config.db[manufactCollect].find_one({"email":email, "password":password, "username":username})) is not None: #i.e. the user was found in manufacturer
+       user_id = userCheck['_id']
+       deletedb_return = config.db[manufactCollect].delete_one({"_id":user_id})
+       if deletedb_return.deleted_count == 1:
+          config.db[productCollect].delete_many({"manufacturer_name": username})
+          return JSONResponse(status_code=status.HTTP_204_NO_CONTENT)
+  raise HTTPException(status_code=404, detail=f"That user could not be found to remove.")
 
-@apiRouter.delete("/testing/remove_all")
-async def delete_user(code_word: str):
-  if code_word == "BANISH":
-    config.db[manufactCollect].delete_many({})
-    config.db[regularCollect].delete_many({})
-    config.db[adminCollect].delete_many({})
+# @apiRouter.delete("/testing/remove_all")
+# async def delete_user(code_word: str):
+#   if code_word == "BANISH":
+#     config.db[manufactCollect].delete_many({})
+#     config.db[regularCollect].delete_many({})
+#     config.db[adminCollect].delete_many({})
 
 
 @apiRouter.get("/manufacturer/searchByName", response_model=user.Manufacturer)
@@ -178,18 +193,20 @@ async def update_regular(old_username: str, new_username: str, email: str):
 @apiRouter.put("/updateByAdmin/updateUsername")
 async def update_username(old_username:str, new_username: str, email:str):
   if(userExists := config.db[regularCollect].find_one({"username": old_username, "email":email})) is not None and (userDoesntExist := config.db[regularCollect].find_one({"username":new_username, "email":email})) is None:
-      updateResult = config.db[regularCollect].update_one({"username":old_username, "email":email}, {"$set":{"username":new_username}})
-      if updateResult.modified_count == 1:
-        return JSONResponse(status_code=status.HTTP_200_OK)
-      else:
-        raise HTTPException(status_code=404, detail="Regular user was not able to be updated.")
+    updateResult = config.db[regularCollect].update_one({"username":old_username, "email":email}, {"$set":{"username":new_username}})
+    if updateResult.modified_count == 1:
+      return JSONResponse(status_code=status.HTTP_200_OK)
+    else:
+      raise HTTPException(status_code=404, detail="Regular user was not able to be updated.")
+  elif(userExists := config.db[manufactCollect].find_one({"username": old_username, "email":email})) is not None and (userDoesntExist := config.db[manufactCollect].find_one({"username":new_username, "email":email})) is None:
+    updateResult = config.db[manufactCollect].update_one({"username":old_username, "email":email}, {"$set":{"username":new_username}})
+    if updateResult.modified_count == 1:
+
+      return JSONResponse(status_code=status.HTTP_200_OK)
+    else:
+      raise HTTPException(status_code=404, detail="Regular user was not able to be updated.")
   else:
-    if(userExists := config.db[manufactCollect].find_one({"username": old_username, "email":email})) is not None and (userDoesntExist := config.db[manufactCollect].find_one({"username":new_username, "email":email})) is None:
-        updateResult = config.db[manufactCollect].update_one({"username":old_username, "email":email}, {"$set":{"username":new_username}})
-        if updateResult.modified_count == 1:
-          return JSONResponse(status_code=status.HTTP_200_OK)
-        else:
-          raise HTTPException(status_code=404, detail="Regular user was not able to be updated.")
+    raise HTTPException(status_code=404, detail="User was not able to be updated.")
 
 @apiRouter.put("/updateByAdmin/updateEmail")
 async def update_username(username:str, old_email: str, new_email:str):

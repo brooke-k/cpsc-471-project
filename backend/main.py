@@ -17,13 +17,13 @@ ThisApp.include_router(testing.apiRouter)
 def parse_json(data):
     return json.loads(json_util.dumps(data))
 
-origins = ["http://localhost:8000"]
+origins = ["http://localhost:8000", "http://127.0.0.1:80"]
 ThisApp.add_middleware(
     CORSMiddleware,
-    allow_origins=origins,
+    allow_origins=["*"],
     allow_credentials=True,
-    allow_methods="*",
-    allow_headers="*",
+    allow_methods=["*"],
+    allow_headers=["*"],
 )
 
 

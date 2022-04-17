@@ -22,6 +22,7 @@ import ManufacturerProfile from "./pages/ManufacturerProfile";
 import AdminProfile from "./pages/AdminProfile";
 import AccountDeleted from "./pages/AccountDeleted";
 import ManageUsers from "./pages/ManageUsers";
+import ManageProducts from "./pages/ManageProducts";
 
 const App = () => {
   return (
@@ -39,6 +40,7 @@ const App = () => {
           <Route path="/regular_home" element={<RegularHome />}></Route>
           <Route path="/post_delete" element={<AccountDeleted />}></Route>
           <Route path="/manage_users" element={<ManageUsers />}></Route>
+          <Route path="/manage_products" element={<ManageProducts />}></Route>
           <Route
             path="/search_manufacturer"
             element={<SearchManufacturer />}
