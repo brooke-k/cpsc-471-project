@@ -1,7 +1,8 @@
 # CPSC 471 - Database Management - Group Project
 Group project for CPSC-471 Database Management
 
-Code written by Brooke Kindleman
+**Group 14**
+*Code written by Brooke Kindleman*
 
 ## Installing Dependencies
 ### Installing Frontend Dependencies
