@@ -139,12 +139,12 @@ async def delete_user(email: str, username: str, password: str, admin_id: Option
 #     config.db[adminCollect].delete_many({})
 
 
-@apiRouter.get("/manufacturer/searchByName", response_model=user.Manufacturer)
-async def get_manufacturer(name: str):
-    if (userCheck := config.db[manufactCollect].find_one({"name": name})) is not None:
+@apiRouter.get("/manufacturer/search")
+async def get_manufacturer(name: Optional[str] = "_", email: Optional[str] = "_", username: Optional[str] = "_"):
+    if (userCheck := config.db[manufactCollect].find({"$or":[{"name": name},{"email":email},{"username":username}]},{'password':0})) is not None:
       return parse_json(userCheck)
     else:
-      raise HTTPException(status_code=400, detail="A manufacturer with that name could not be found")
+      raise HTTPException(status_code=400, detail="A manufacturer matching that criteria could not be found")
 
 @apiRouter.get("/get/allRegular", response_description="Get all regular users")
 async def get_all_regular():

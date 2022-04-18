@@ -186,9 +186,9 @@ async def get_productByIngredients(allergenList: Optional[List[Pattern]] = Query
 
 
 
-@apiRouter.get("/search/productManufacturer", response_model=List[product.Product])
+@apiRouter.get("/search/byManufacturerName", response_description="Get products by manufacturer name")
 async def get_productByName(name:str):
   if(productInfo := list(config.db[productCollect].find({"manufacturer_name":name}))) is not None:
-    return productInfo
+    return parse_json(productInfo)
   else:
     raise HTTPException(status_code=400, detail="A product made by that manufacturer could not be found")
