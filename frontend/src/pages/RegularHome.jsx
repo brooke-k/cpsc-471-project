@@ -6,6 +6,7 @@ import { getCookie } from "../Cookies";
 
 const RegularHome = () => {
   const navigation = useNavigate();
+
   function verifyPageAccess() {
     if (window.location.pathname !== handleNav(window.location.pathname)) {
       navigation(handleNav(window.location.pathname));
@@ -13,12 +14,22 @@ const RegularHome = () => {
   }
   useEffect(() => {
     verifyPageAccess();
+    getUserName();
   }, []);
+
+  function getUserName() {
+    const aName = getCookie("username_email").split("_");
+    if (aName[0] === "") {
+      return "Administrator";
+    }
+    return aName[0];
+  }
   return (
     <>
       <RegularNavBar />
-      <div>
-        <h1>Regular Home</h1>
+      <div id="pageContent">
+        <h1>Welcome, {getUserName()}</h1>
+        <h2>User Home</h2>
       </div>
     </>
   );

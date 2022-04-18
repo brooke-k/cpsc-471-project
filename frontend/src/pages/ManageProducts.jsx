@@ -117,7 +117,7 @@ const ManageProducts = () => {
 
   return (
     <>
-      <AdminNavBar />
+      {currNav}
       <div
         id="AppBase"
         style={{

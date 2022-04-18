@@ -14,6 +14,7 @@ class Ingredient {
 const AddProduct = () => {
   const [currNav, setCurrNav] = useState(<></>);
   useEffect(() => {
+    checkManufacturer();
     checkNavbar();
   }, []);
   function checkNavbar() {
@@ -50,6 +51,26 @@ const AddProduct = () => {
     /TRITICALE/,
     /GLUTEN/,
   ]; // Saved as RegEx's
+
+  function checkManufacturer() {
+    const aName = getCookie("access_level");
+    if (aName === "manufacturer") {
+      const user_mail = getCookie("username_email").split("_");
+      const email = user_mail[1];
+      console.log(user_mail[0]);
+      axiosJSONInst
+        .get(
+          "/user/getInfo/manufacturer?username=" +
+            user_mail[0] +
+            "&email=" +
+            user_mail[1]
+        )
+        .then((res) => {
+          setManuName(res.data.name);
+        });
+      return;
+    }
+  }
 
   const handleCurrIngred = (e) => {
     setCurrIngred(e.target.value);
@@ -143,6 +164,7 @@ const AddProduct = () => {
       })
       .then((res) => {
         console.log(res);
+        setInfoNotif('Product "' + prodName + '" added.');
       });
   };
 
@@ -170,7 +192,11 @@ const AddProduct = () => {
               placeholder="manuName"
               onInput={handleManuName}
             ></input>
-            <label htmlFor="prodName">Manufacturer Name</label>
+            <label htmlFor="prodName">
+              Manufacturer Name
+              <br />
+              {manuName === "" ? "" : "(default: ".concat(manuName + ")")}
+            </label>
           </div>
           <div id="inputRow" style={{ justifyContent: "start" }}>
             <input

@@ -15,6 +15,9 @@ const manufacturerUserPaths = [
   "/search_product",
   "/add_product",
   "/manufacturer_profile",
+  "/manage_products",
+  "/search_manufacturer",
+  "/viewall_products",
 ];
 
 const adminUserPaths = [
@@ -25,6 +28,7 @@ const adminUserPaths = [
   "/viewall_users",
   "/viewall_products",
   "/manage_products",
+  "/search_manufacturer",
 ];
 
 function isLoggedIn() {

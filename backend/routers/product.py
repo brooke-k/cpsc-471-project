@@ -105,7 +105,7 @@ async def get_productByName(name:Optional[Pattern] = r"^.*$"):
   else:
     raise HTTPException(status_code=400, detail="A product with that name could not be found")
 
-@apiRouter.get("/search/nameANDORManufacturer")
+@apiRouter.get("/search/bymanufacturer")
 async def get_product_namemanufacturer(name: Optional[str] = None, manufacturer: Optional[str] = None):
   if name is not None and manufacturer is not None:
     if (productInfo := list(config.db[productCollect].find({"$and":[{"name":name}, {"manufacturer_name":manufacturer}]}))) is not None:

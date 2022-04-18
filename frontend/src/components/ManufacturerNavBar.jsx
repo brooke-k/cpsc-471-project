@@ -10,16 +10,14 @@ const ManufacturerNavBar = () => {
     banishCookie();
     goNav("/");
   }
-  // "/regular_home",
-  // "/search_product",
-  // "/regular_profile",
-  // "/search_manufacturer",
+
   const navLinks = [
     { path: "/manufacturer_home", title: "Home" },
     { path: "/search_product", title: "Search Products" },
     { path: "/search_manufacturer", title: "Search by Manufacturer" },
-    { path: "/manufacturer_profile", title: "Manage Profile" },
     { path: "/add_product", title: "AddProduct" },
+    { path: "/manage_products", title: "Manage Products" },
+    { path: "/manufacturer_profile", title: "Manage Profile" },
   ];
 
   return (

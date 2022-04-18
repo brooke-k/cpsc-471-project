@@ -14,10 +14,10 @@ const AdminNavBar = () => {
   const navLinks = [
     { path: "/admin_home", title: "Home" },
     { path: "/search_product", title: "Search Products" },
-    { path: "/search_manufacturer", title: "Search by Manufacturer" },
-    { path: "/admin_profile", title: "Manage Profile" },
-    { path: "/manage_users", title: "Manage Users" },
     { path: "/manage_products", title: "Manage Products" },
+    { path: "/search_manufacturer", title: "Search by Manufacturer" },
+    { path: "/manage_users", title: "Manage Users" },
+    { path: "/admin_profile", title: "Manage Profile" },
   ];
 
   return (
