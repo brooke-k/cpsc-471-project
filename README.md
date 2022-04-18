@@ -51,3 +51,17 @@ Once the following instructions have been followed for running the front and bac
 3. The server can be shut down with `CTRL+C` or the equivalent command for your command line. To restart the server, repeat the above steps.
 
 ### Please Note: These instructions were written using commands for a `zsh` terminal with `xTerm` compatibility. It is recommened that MacOS users utilize the appriate `zsh` terminal and that windows users use a WSL Linux backend.
+
+### `.env` Contents
+
+```
+MONGODB_URL = 'mongodb+srv://allergy-manager-admin:epinephrine-benadryl@cpsc-471-g14.lsui9.mongodb.net/allergy-manager?retryWrites=true&w=majority'
+MONGODB_PORT = '3003'
+MONGODB_DATBASE_NAME = 'allergy-manager'
+
+ENV=development
+PORT=8000
+BASE_API_URL=http://localhost:3003
+PUBLIC_URL=http://localhost:8000
+BASE_WEBSITE_URL=http://localhost:8000
+```
