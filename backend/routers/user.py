@@ -68,14 +68,14 @@ async def get_regular(email: str, username: str):
     raise HTTPException(status_code=404, detail="A user with that email and username could not be found")
 
 @apiRouter.get("/getInfo/manufacturer")
-async def get_regular(email: str, username: str):
-  if(userCheck := config.db[manufactCollect].find_one({"email":email, "username":username}, {'password':0, '_id':0})) is not None:
+async def get_manufacturer(email: str, username: str):
+  if(userCheck := config.db[manufactCollect].find_one({"email":email, "name":username}, {'password':0, '_id':0})) is not None:
     return userCheck
   else:
     raise HTTPException(status_code=404, detail="A user with that email and username could not be found")
 
 @apiRouter.get("/getInfo/administrator")
-async def get_regular(email: str, username: str):
+async def get_admin(email: str, username: str):
   if(userCheck := config.db[adminCollect].find_one({"email":email, "username":username}, {'password':0, '_id':0})) is not None:
     return userCheck
   else:

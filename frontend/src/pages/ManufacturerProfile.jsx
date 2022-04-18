@@ -100,9 +100,12 @@ const ManufacturerProfile = () => {
               padding: "0",
             }}
           >
+            <p>Name: {"N/A"}</p>
             <p>Username: {"N/A"}</p>
             <p>Email Address: {"N/A"}</p>
-            <p>Retail Region: {"N/A"}</p>
+            <p>Phone Number: {"N/A"}</p>
+            <p>Address: {"N/A"}</p>
+            <p>Zip Code: {"N/A"}</p>
           </div>
         );
       });
