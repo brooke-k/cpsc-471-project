@@ -128,9 +128,10 @@ async def get_product_namemanufacturer(name: Optional[str] = None, manufacturer:
     else:
       raise HTTPException(status_code=402, detail="No products could be found.")
 
-@apiRouter.get("/search/")
+@apiRouter.get("/search")
 async def get_product_namemanufacturer(name: Optional[Pattern] = r"^.*$", manufacturer: Optional[Pattern] = r"^.*$", allergenContains: Optional[List[Pattern]] = Query([r"^.*$"]), ingredientContains: Optional[List[Pattern]] = Query([r"^.*$"]), allergenNotContains: Optional[List[Pattern]] = Query([r"^$"]), ingredientNotContains: Optional[List[Pattern]] = Query([r"^$"]), product_id: Optional[Pattern] = r"^.*$"):
-  if (productInfo := list(config.db[productCollect].find({"$and":[{"name":name}, {"manufacturer_name":manufacturer}, {"ingredients":{"$in":ingredientContains, "$nin":ingredientNotContains}}, {"allergens":{"$in":allergenContains, "$nin":allergenNotContains}}]}))) is not None:
+
+  if (productInfo := list(config.db[productCollect].find({"$and":[{"name":name}, {"manufacturer_name":manufacturer}, {"ingredients":{"$in":ingredientContains}}, {"ingredients":{"$nin":ingredientNotContains}}, {"allergens":{"$in":allergenContains}}, {"allergens":{"$nin":allergenNotContains}}, {"id_number":product_id}]}))) is not None:
     return parse_json(productInfo)
   else:
     raise HTTPException(status_code=400, detail="A product with that manufacturer could not be found")

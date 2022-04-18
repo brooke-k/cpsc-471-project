@@ -55,15 +55,19 @@ const ProductSearch = () => {
   const [wheat, setWheat] = useState(false);
   const [triticale, setTriticale] = useState(false);
   const [gluten, setGluten] = useState(false);
-
   const [currIngred, setCurrIngredIn] = useState("");
   const [currAllerg, setCurrAllergIn] = useState("");
   const [errNotif, setErrNotif] = useState("");
   const [hideResults, setHideResults] = useState(true);
   const [searchResult, setSearchResult] = useState([]);
   const [isInclude, setIsInclude] = useState(false);
-  const [ingredList, setIngredList] = useState([]);
-  const [allergList, setAllergList] = useState([]);
+  const [ingredContains, setIngredContains] = useState([]);
+  const [allergContains, setAllergContains] = useState([]);
+  const [ingredNotContains, setIngredNotContains] = useState([]);
+  const [allergNotContains, setAllergNotContains] = useState([]);
+  const [productID, setProductID] = useState("");
+  const [productName, setProductName] = useState("");
+  const [productManufact, setProductManufact] = useState("");
 
   const handleEgg = (e) => {
     setEgg(!egg);
@@ -108,7 +112,7 @@ const ProductSearch = () => {
     setGluten(!gluten);
   };
 
-  const topAllergens = [
+  let topAllergens = [
     [encodeURIComponent("^EGG$"), egg, "Egg", handleEgg],
     [encodeURIComponent("^MILK$"), milk, "Milk", handleMilk],
     [encodeURIComponent("^MUSTARD$"), mustard, "Mustard", handleMustard],
@@ -147,7 +151,36 @@ const ProductSearch = () => {
     setCurrAllergIn(e.target.value);
   };
 
-  function addIngredient() {
+  function resetInputs() {
+    setCurrAllergIn("");
+    setCurrIngredIn("");
+    setProductID("");
+    setProductManufact("");
+    setProductName("");
+    setIngredContains([]);
+    setIngredNotContains([]);
+    setAllergContains([]);
+    setAllergNotContains([]);
+    setEgg(false);
+    setMilk(false);
+    setMustard(false);
+    setPeanut(false);
+    setCrustacean(false);
+    setMollusc(false);
+    setFish(false);
+    setSesame(false);
+    setSoy(false);
+    setSulphite(false);
+    setNut(false);
+    setWheat(false);
+    setTriticale(false);
+    setGluten(false);
+    for (let i = 0; i < topAllergens.length; i++) {
+      topAllergens[i][1] = false;
+    }
+  }
+
+  function addContainsIngred() {
     if (currIngred === "") {
       return;
     }
@@ -159,9 +192,9 @@ const ProductSearch = () => {
       );
       return;
     }
-    for (let i = 0; i < ingredList.length; i++) {
+    for (let i = 0; i < ingredContains.length; i++) {
       setErrNotif('"' + newIngred + '" has already been added.');
-      if (newIngred.match(new RegExp("^" + ingredList[i] + "$")) !== null) {
+      if (newIngred.match(new RegExp("^" + ingredContains[i] + "$")) !== null) {
         return;
       }
     }
@@ -177,13 +210,51 @@ const ProductSearch = () => {
       }
     }
 
-    const comboList = ingredList.concat([newIngred]);
-    setIngredList(comboList);
+    const comboList = ingredContains.concat([newIngred]);
+    setIngredContains(comboList);
     setErrNotif('Added "' + newIngred + '"');
     setCurrIngredIn("");
   }
 
-  function addAllergen() {
+  function addNotContainsIngred() {
+    if (currIngred === "") {
+      return;
+    }
+    const newIngred = currIngred.toUpperCase();
+
+    if (newIngred.match(notAllowedChars) !== null) {
+      setErrNotif(
+        "Ingredient name cannot contain characters other than letters, numbers, spaces, or hyphens."
+      );
+      return;
+    }
+    for (let i = 0; i < ingredNotContains.length; i++) {
+      setErrNotif('"' + newIngred + '" has already been added.');
+      if (
+        newIngred.match(new RegExp("^" + ingredNotContains[i] + "$")) !== null
+      ) {
+        return;
+      }
+    }
+    for (let i = 0; i < topAllergens.length; i++) {
+      if (
+        topAllergens[i][1] &&
+        newIngred.match(
+          new RegExp("^" + topAllergens[i][2].toUpperCase() + "$")
+        ) !== null
+      ) {
+        setErrNotif('"' + newIngred + '" has already been added.');
+        return;
+      }
+    }
+
+    const comboList = ingredNotContains.concat([newIngred]);
+    setIngredNotContains(comboList);
+    setErrNotif('Added "' + newIngred + '"');
+    setCurrIngredIn("");
+  }
+
+  function addContainsAllergen() {
     if (currAllerg === "") {
       return;
     }
@@ -195,8 +266,35 @@ const ProductSearch = () => {
       );
       return;
     }
-    for (let i = 0; i < allergList.length; i++) {
-      if (newIngred.match(new RegExp("^" + allergList[i] + "$")) !== null) {
+    for (let i = 0; i < allergContains.length; i++) {
+      if (newIngred.match(new RegExp("^" + allergContains[i] + "$")) !== null) {
+        setErrNotif('"' + newIngred + '" has already been added.');
+        return;
+      }
+    }
+
+    const comboList = allergContains.concat([newIngred]);
+    setAllergContains(comboList);
+    setErrNotif('Added "' + newIngred + '"');
+    setCurrAllergIn("");
+  }
+
+  function addNotContainsAllergen() {
+    if (currAllerg === "") {
+      return;
+    }
+    const newIngred = currAllerg.toUpperCase();
+
+    if (newIngred.match(notAllowedChars) !== null) {
+      setErrNotif(
+        "Allergen name cannot contain characters other than letters, numbers, spaces, or hyphens."
+      );
+      return;
+    }
+    for (let i = 0; i < allergNotContains.length; i++) {
+      if (
+        newIngred.match(new RegExp("^" + allergNotContains[i] + "$")) !== null
+      ) {
         setErrNotif('"' + newIngred + '" has already been added.');
         return;
       }
@@ -212,61 +310,10 @@ const ProductSearch = () => {
         return;
       }
     }
-    const comboList = allergList.concat([newIngred]);
-    setAllergList(comboList);
+    const comboList = allergNotContains.concat([newIngred]);
+    setAllergNotContains(comboList);
     setErrNotif('Added "' + newIngred + '"');
     setCurrAllergIn("");
-  }
-
-  function handleSearchAllergensOnly() {
-    var returnString = "allergenList=";
-    returnString += allergList[0];
-    for (let i = 1; i < allergList.length; i++) {
-      returnString += "&allergenList=" + allergList[i];
-    }
-    for (let i = 0; i < topAllergens.length; i++) {
-      if (topAllergens[i][1]) {
-        returnString += "&allergenList=" + topAllergens[i][0];
-      }
-    }
-    returnString += "&ingredientList=";
-    return returnString;
-  }
-
-  function handleSearchIngredientsOnly() {
-    var returnString = "ingredientList=";
-    returnString += ingredList[0];
-    for (let i = 1; i < ingredList.length; i++) {
-      returnString += "&ingredientList=" + ingredList[i];
-    }
-    var found = false;
-    for (let i = 0; i < topAllergens.length; i++) {
-      if (topAllergens[i][1]) {
-        returnString += "&allergenList=" + topAllergens[i][0];
-        found = true;
-      }
-    }
-    returnString += "&allergenList=";
-
-    return returnString;
-  }
-
-  function handleSearchIngredAndAllerg() {
-    var returnString = "ingredientList=";
-    returnString += ingredList[0];
-    for (let i = 1; i < ingredList.length; i++) {
-      returnString += "&ingredientList=" + ingredList[i];
-    }
-    for (let i = 0; i < allergList.length; i++) {
-      returnString += "&allergenList=" + allergList[i];
-    }
-
-    for (let i = 0; i < topAllergens.length; i++) {
-      if (topAllergens[i][1]) {
-        returnString += "&allergenList=" + topAllergens[i][0];
-      }
-    }
-    return returnString;
   }
 
   function listIngredients(i) {
@@ -315,91 +362,247 @@ const ProductSearch = () => {
     return returnString;
   }
 
-  const handleRes = (e) => {
-    console.log(e);
-    const oy = JSON.parse(e);
-    const newDispInf = new productDispInfo(
-      oy["name"],
-      oy["manufacturer_name"],
-      oy["id_number"],
-      oy["allergens"],
-      oy["ingredients"]
-    );
-    const comboList = searchResult.concat([newDispInf]);
-    setSearchResult(comboList);
-    if (searchResult.length > 0)
-      console.log("handled" + searchResult[searchResult.length - 1].name);
-  };
+  function handleSearch() {
+    const matchAllArray = [encodeURIComponent("^.*$")];
+    const matchNoneArray = [encodeURIComponent("^$")];
+    const matchAllString = encodeURIComponent("^.*$");
 
-  const handleSearch = () => {
-    var searchString = isInclude
-      ? "/product/search/allergens_ingredients/contains?"
-      : "/product/search/allergens_ingredients/notContains?";
-    if (ingredList.length > 0 || allergList.length > 0) {
-      if (ingredList.length > 0) {
-        searchString += handleSearchIngredientsOnly();
-      } else if (allergList.length > 0) {
-        searchString += handleSearchAllergensOnly();
-      } else {
-        searchString += handleSearchIngredAndAllerg();
-      }
+    let searchString = "/product/search?product_id=";
+
+    let isEmpty = true;
+
+    if (productID === "") {
+      searchString += matchAllString;
     } else {
-      searchString += handleSearchNoCriteria();
+      searchString += productID;
+      isEmpty = false;
+    }
+    if (productName === "") {
+      searchString += "&name=";
+      searchString += matchAllString;
+    } else {
+      searchString += "&name=";
+      searchString += productName;
+      isEmpty = false;
+    }
+    if (productManufact === "") {
+      searchString += "&manufacturer=";
+      searchString += matchAllString;
+    } else {
+      searchString += "&manufacturer=";
+      searchString += productManufact;
+      isEmpty = false;
+    }
+
+    if (ingredContains.length === 0) {
+      searchString += "&ingredientContains=";
+      searchString += matchAllArray;
+    } else {
+      ingredContains.forEach((e) => {
+        searchString += "&ingredientContains=";
+        searchString += e;
+        isEmpty = false;
+      });
+    }
+    if (ingredNotContains.length === 0) {
+      searchString += "&ingredientNotContains=";
+      searchString += matchNoneArray;
+    } else {
+      ingredNotContains.forEach((e) => {
+        searchString += "&ingredientNotContains=";
+        searchString += e;
+        isEmpty = false;
+      });
+    }
+    let topAdded = false;
+    topAllergens.forEach((e) => {
+      if (e[1]) {
+        topAdded = true;
+        searchString += "&allergenNotContains=";
+        searchString += e[0];
+        isEmpty = false;
+      }
+    });
+
+    if (allergNotContains.length === 0 && !topAdded) {
+      searchString += "&allergenNotContains=";
+      searchString += matchNoneArray;
+    } else {
+      allergNotContains.forEach((e) => {
+        searchString += "&allergNotContains=";
+        searchString += e;
+        isEmpty = false;
+      });
+    }
+    if (allergContains.length === 0) {
+      searchString += "&allergenContains=";
+      searchString += matchAllArray;
+    } else {
+      allergContains.forEach((e) => {
+        searchString += "&allergenContains=";
+        searchString += e;
+        isEmpty = false;
+      });
+    }
+
+    if (isEmpty) {
+      setErrNotif("Please at least one search criteria");
+      return;
+    } else {
+      setErrNotif("");
     }
 
     axiosJSONInst
       .get(searchString)
       .then((res) => {
-        setSearchResult([res.data.length]);
-        for (let i = 0; i < res.data.length; i++) {
-          let temp = res.data[i];
-          let tempStr = JSON.stringify(temp);
-          let tempObj = JSON.parse(tempStr);
-          let tempArr = searchResult;
-          tempArr[i] = tempObj;
-          setSearchResult(tempArr);
-          handleRes(JSON.stringify(res.data[i]));
-        }
+        setSearchResult(JSON.parse(JSON.stringify(res.data)));
+        setHideResults(false);
       })
       .catch((err) => console.log(err));
-    setHideResults(false);
-  };
+  }
+
+  function handleSearchAll() {
+    const matchAllArray = [encodeURIComponent("^.*$")];
+    const matchNoneArray = [encodeURIComponent("^$")];
+    const matchAllString = encodeURIComponent("^.*$");
+
+    let searchString = "/product/search?product_id=";
+
+    if (productID === "") {
+      searchString += matchAllString;
+    } else {
+      searchString += productID;
+    }
+    if (productName === "") {
+      searchString += "&name=";
+      searchString += matchAllString;
+    } else {
+      searchString += "&name=";
+      searchString += productName;
+    }
+    if (productManufact === "") {
+      searchString += "&manufacturer=";
+      searchString += matchAllString;
+    } else {
+      searchString += "&manufacturer=";
+      searchString += productManufact;
+    }
+
+    if (ingredContains.length === 0) {
+      searchString += "&ingredientContains=";
+      searchString += matchAllArray;
+    } else {
+      ingredContains.forEach((e) => {
+        searchString += "&ingredientContains=";
+        searchString += e;
+      });
+    }
+    if (ingredNotContains.length === 0) {
+      searchString += "&ingredientNotContains=";
+      searchString += matchNoneArray;
+    } else {
+      ingredNotContains.forEach((e) => {
+        searchString += "&ingredientNotContains=";
+        searchString += e;
+      });
+    }
+    let topAdded = false;
+    topAllergens.forEach((e) => {
+      if (e[1]) {
+        topAdded = true;
+        searchString += "&allergenNotContains=";
+        searchString += e[0];
+      }
+    });
+
+    if (allergNotContains.length === 0 && !topAdded) {
+      searchString += "&allergenNotContains=";
+      searchString += matchNoneArray;
+    } else {
+      allergNotContains.forEach((e) => {
+        searchString += "&allergNotContains=";
+        searchString += e;
+      });
+    }
+    if (allergContains.length === 0) {
+      searchString += "&allergenContains=";
+      searchString += matchAllArray;
+    } else {
+      allergContains.forEach((e) => {
+        searchString += "&allergenContains=";
+        searchString += e;
+      });
+    }
+
+    axiosJSONInst
+      .get(searchString)
+      .then((res) => {
+        setSearchResult(JSON.parse(JSON.stringify(res.data)));
+        setHideResults(false);
+      })
+      .catch((err) => console.log(err));
+  }
 
   return (
-    <>
+    <div id="AppBase" style={{ padding: "2rem" }}>
       {currNav}
-      <div id="pagePanel" styles={{ margin: "0rem" }}>
-        <div id="pageContent" style={{ rowGap: "0" }}>
-          <h1 style={{ fontSize: "32pt" }}>Product Search</h1>{" "}
+      <div id="pagePanel" styles={{ margin: "2rem" }}>
+        <div
+          id="pageContent"
+          style={{ rowGap: "0", flexWrap: "nowrap", width: "inherit" }}
+        >
+          <h1 style={{ fontSize: "28pt", padding: "0", margin: "0" }}>
+            Product Search
+          </h1>
           <div
             id="inputRow"
-            style={{ justifyContent: "center", flexWrap: "wrap" }}
+            style={{
+              justifyContent: "center",
+              flexWrap: "nowrap",
+            }}
           >
-            {topAllergens.map((e, i) => {
-              return (
-                <div style={{ margin: "0", padding: "0" }} key={i}>
-                  <label htmlFor={topAllergens[i][2]}>
-                    {topAllergens[i][2]}
-                  </label>
-                  <input
-                    type="checkbox"
-                    name={topAllergens[i][2]}
-                    value={topAllergens[i][1]}
-                    onChange={topAllergens[i][3]}
-                  />
-                </div>
-              );
-            })}
+            <h3 style={{ flexShrink: 0, width: "minContent" }}>
+              Exclude the
+              <br />
+              Selected Allergens:
+            </h3>
+            <div
+              style={{
+                margin: "0",
+                padding: "0",
+                display: "flex",
+                height: "3rem",
+                width: "inherit",
+                flexFlow: "row",
+                flexWrap: "wrap",
+              }}
+            >
+              {topAllergens.map((e, i) => {
+                return (
+                  <div style={{ margin: "0 1.5ch 0 0", padding: "0" }} key={i}>
+                    <label htmlFor={topAllergens[i][2]}>
+                      {topAllergens[i][2]}
+                    </label>
+                    <input
+                      type="checkbox"
+                      name={topAllergens[i][2]}
+                      value={topAllergens[i][1]}
+                      onChange={topAllergens[i][3]}
+                      checked={topAllergens[i][1]}
+                    />
+                  </div>
+                );
+              })}
+            </div>
           </div>
-          <div id="inputRow" style={{ justifyContent: "center" }}>
-            <p>Search products that</p>
-            <select value={isInclude} onChange={handleIsInclude}>
-              <option value={true}>contain</option>{" "}
-              <option value={false}>do not contain</option>
-            </select>
-            <p>the selected allergens and ingredients</p>
-          </div>
-          <div id="inputRow" style={{ justifyContent: "space-between" }}>
+          <div
+            id="inputRow"
+            style={{
+              borderStyle: "solid none none none",
+              borderColor: "gainsboro",
+            }}
+          ></div>
+          <div id="inputRow">
             <input
               id="prodName"
               value={currIngred}
@@ -408,14 +611,11 @@ const ProductSearch = () => {
               onInput={handleCurrIngred}
               style={{ width: "25rem" }}
             ></input>
-            <label htmlFor="prodName">
-              Add Ingredient to {isInclude ? "Include" : "Exclude"}
-            </label>
-            <button className="plus" onClick={addIngredient}>
-              +
-            </button>
+            <label htmlFor="prodName">Add Ingredient</label>
+            <button onClick={addContainsIngred}>Add to "Contain"</button>
+            <button onClick={addNotContainsIngred}>Add to "Exclude"</button>
           </div>
-          <div id="inputRow" style={{ justifyContent: "space-between" }}>
+          <div id="inputRow">
             <input
               id="prodName"
               value={currAllerg}
@@ -424,14 +624,35 @@ const ProductSearch = () => {
               onInput={handleCurrAllerg}
               style={{ width: "25rem" }}
             ></input>
-            <label htmlFor="prodName">
-              Add Allergen to {isInclude ? "Include" : "Exclude"}
-            </label>
-            <button className="plus" onClick={addAllergen}>
-              +
-            </button>
+            <label htmlFor="prodName">Add Allergen</label>
+            <button onClick={addContainsAllergen}>Add to "Include"</button>
+            <button onClick={addNotContainsAllergen}>Add to "Exclude"</button>
           </div>
-          <p>{errNotif}</p>
+          <div id="inputRow">
+            <input
+              type="text"
+              value={productName}
+              placeholder="(Optional) Product Name"
+              onChange={(e) => setProductName(e.target.value)}
+            ></input>
+          </div>
+          <div id="inputRow">
+            <input
+              type="text"
+              value={productManufact}
+              placeholder="(Optional) Product Manufacturer"
+              onChange={(e) => setProductManufact(e.target.value)}
+            ></input>
+          </div>
+          <div id="inputRow" style={{ flexFlow: "row", display: "flex" }}>
+            <input
+              type="text"
+              value={productID}
+              placeholder="(Optional) Product ID"
+              onChange={(e) => setProductID(e.target.value)}
+            ></input>
+          </div>
+          <p style={{ fontSize: "16pt", color: "firebrick" }}>{errNotif}</p>
         </div>
         <div id="pageContent" style={{ flexFlow: "column" }}>
           <div id="inputGrid">
@@ -441,12 +662,23 @@ const ProductSearch = () => {
                 gridRow: "1",
               }}
             >
-              <p>
-                Additional Ingredients to {isInclude ? "Include" : "Exclude"}
-              </p>
+              <p>Ingredients to Include</p>
               <ul>
-                {ingredList.map((e, i) => {
-                  return <li key={i}>{ingredList[i]}</li>;
+                {ingredContains.map((e, i) => {
+                  return <li key={i}>{ingredContains[i]}</li>;
+                })}
+              </ul>
+            </div>
+            <div
+              style={{
+                gridColumn: "1",
+                gridRow: "2",
+              }}
+            >
+              <p>Allergens to Include</p>
+              <ul>
+                {allergContains.map((e, i) => {
+                  return <li key={i}>{allergContains[i]}</li>;
                 })}
               </ul>
             </div>
@@ -456,10 +688,23 @@ const ProductSearch = () => {
                 gridRow: "1",
               }}
             >
-              <p>Additional Allergens to {isInclude ? "Include" : "Exclude"}</p>
+              <p>Ingredients to Exclude</p>
               <ul>
-                {allergList.map((e, i) => {
-                  return <li key={i}>{allergList[i]}</li>;
+                {ingredNotContains.map((e, i) => {
+                  return <li key={i}>{ingredNotContains[i]}</li>;
+                })}
+              </ul>
+            </div>
+            <div
+              style={{
+                gridColumn: "2",
+                gridRow: "2",
+              }}
+            >
+              <p>Allergens to Exclude</p>
+              <ul>
+                {allergNotContains.map((e, i) => {
+                  return <li key={i}>{allergNotContains[i]}</li>;
                 })}
                 {topAllergens.map((e, i) => {
                   return topAllergens[i][1] ? (
@@ -474,14 +719,55 @@ const ProductSearch = () => {
               </ul>
             </div>
           </div>
-          <button onClick={handleSearch} style={{ alignSelf: "center" }}>
-            t Search
-          </button>
+          <div id="inputRow">
+            <button
+              style={{
+                alignSelf: "center",
+                width: "10rem",
+                margin: "0 6rem 0 1rem",
+              }}
+              onClick={resetInputs}
+            >
+              Reset Inputs
+            </button>
+            <button
+              onClick={handleSearchAll}
+              style={{ alignSelf: "center", width: "15rem" }}
+            >
+              View All Products
+            </button>
+            <button
+              onClick={handleSearch}
+              style={{ alignSelf: "center", width: "15rem" }}
+            >
+              Search Matching Products
+            </button>
+          </div>
         </div>
       </div>
       <div hidden={hideResults} style={{ margin: "3rem 0 0 0", padding: "0" }}>
-        <div id="pagePanel" style={{ margin: "0 0 0 0" }} hidden={hideResults}>
-          <div id="pageContent" style={{ gap: "0", textAlign: "left" }}>
+        <div
+          id="pagePanel"
+          style={{ margin: "0 0 0 0", height: "auto", minHeight: "30rem" }}
+          hidden={hideResults}
+        >
+          <div
+            id="pageContent"
+            style={{
+              gap: "0",
+              textAlign: "left",
+              justifyContent: "start",
+              height: "auto",
+            }}
+          >
+            <h1
+              style={{ fontSize: "28pt", padding: "0", margin: "1rem 0 1rem" }}
+            >
+              Search Results
+            </h1>{" "}
+            <p style={{ fontStyle: "italic" }}>
+              {searchResult.length} matching products were found
+            </p>
             <table>
               <thead></thead>
               <tbody>
@@ -490,24 +776,45 @@ const ProductSearch = () => {
                   <td>Allergens</td>
                   <td>Ingredients</td>
                   <td>Manufacturer</td>
+                  <td>Product ID Number</td>
                 </tr>
                 {searchResult.map((e, i) => {
                   return (
                     <tr>
                       <td key={i * 4 + 0}>{searchResult[i].name}</td>
-                      <td key={i * 4 + 1}>{listAllergens(i)}</td>
-                      <td key={i * 4 + 2}>{listIngredients(i)}</td>
-                      <td key={i * 4 + 3}>{searchResult[i].manufacturer}</td>
+                      <td key={i * 4 + 1}>
+                        {searchResult[i].allergens.map((f, j) => {
+                          if (j === 0) {
+                            return searchResult[i].allergens[j];
+                          } else {
+                            return ", " + searchResult[i].allergens[j];
+                          }
+                        })}
+                      </td>
+                      <td key={i * 4 + 2}>
+                        {searchResult[i].ingredients.map((f, j) => {
+                          if (j === 0) {
+                            return searchResult[i].ingredients[j];
+                          } else {
+                            return ", " + searchResult[i].ingredients[j];
+                          }
+                        })}
+                      </td>
+                      <td key={i * 4 + 3}>
+                        {searchResult[i].manufacturer_name}
+                      </td>
+                      <td key={i * 5 + 4}> {searchResult[i].id_number}</td>
                     </tr>
                   );
                 })}
               </tbody>
               <tfoot></tfoot>
             </table>
+            <p style={{ fontWeight: "600" }}>End of Results</p>
           </div>
         </div>
       </div>
-    </>
+    </div>
   );
 };
 
