@@ -7,6 +7,7 @@ import AdminNavBar from "../components/AdminNavBar";
 import { parseCookie } from "../Auth";
 import axiosJSONInst from "../axios";
 import axios from "axios";
+import { useNavigate } from "react-router-dom";
 
 const RegularProfile = () => {
   const [currNav, setCurrNav] = useState(<></>);
@@ -14,7 +15,7 @@ const RegularProfile = () => {
     checkNavbar();
     getProfileInfo();
   }, []);
-
+  const navigate = useNavigate();
   function checkNavbar() {
     return getCookie("access_level") === "regular"
       ? setCurrNav(<RegularNavBar />)
@@ -137,6 +138,7 @@ const RegularProfile = () => {
             .then((res) => {
               setDeleteNotif("Account successfully deleted.");
               banishCookie();
+              navigate("/post_delete");
             })
             .catch((err) => {
               console.log(err);
@@ -144,6 +146,7 @@ const RegularProfile = () => {
                 "Something went wrong during the deletion process. Please contact an Allergy Manager administrator."
               );
               banishCookie();
+              navigate("/");
             });
         }
       })
